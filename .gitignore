@@ -131,3 +131,4 @@ dmypy.json
 # pyergast 
 pyergast_source
 .DS_Store
+scratch.ipynb
