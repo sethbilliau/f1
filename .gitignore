@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# pyergast 
+pyergast_source
+.DS_Store
