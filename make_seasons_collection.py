@@ -11,30 +11,13 @@ import requests
 import json
 from datetime import datetime
 from datetime import date
-import time
 from pprint import pprint
 from pyergast_source.pyergast import pyergast as ergast
+from dotenv import dotenv_values
 from pymongo import MongoClient
 
-
-def getMongoDB():
-
-    # Get values from .env 
-    config = dotenv_values('.env')
-
-    db_uri = config['DB_URI']
-    db_user = config['DB_USER']
-    db_pw = config['DB_PW']
-    db_name = config['DB_NAME']
-
-    # Connect to the database with the connection string we got from Atlas, replacing user and password.
-    client = MongoClient('mongodb+srv://{db_user}:{db_pw}@{db_uri}')
-    
-    # Next we define the database we are using.
-    # It does not have to exist first, like with relational databases.
-    db = client.get_database(db_name)
-
-    return db
+# import functions from utils 
+from utils import getMongoDB
 
 
 def main(): 
