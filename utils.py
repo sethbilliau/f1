@@ -62,5 +62,13 @@ def execute_neo_commands(execution_commands, graphDB_driver):
     return
 
 
+# def get_shortest_path(driver1, driver2, graphDB_driver):
+#     shortestPathQuery = 'MATCH (p1:Driver { driverID: "' + driver1\
+#         + '"} }),(p2:Driver { driverID: "' + driver2 + '" }), path = shortestPath((p1)-[*..15]-(p2)) RETURN path'''
+#     session = graphDB_driver.session()   
+
+#     session.run(shortestPathQuery)
+
+
 if __name__ == "__main__":
     pass

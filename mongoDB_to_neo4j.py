@@ -24,7 +24,8 @@ def main():
     # Create all of the driver nodes in the data set from the MongoDB
     for doc in dbDrivers.find({}):
         neo4j_create_node_statemenet = 'CREATE (t:Driver {driverID: "' + str(doc['driverID'])\
-        + '", givenName: "' + str(doc['givenName']) +'", familyName: "' + str(doc['familyName']) +'", url: "' + str(doc['url'])\
+        + '", fullName:"' + str(doc['givenName']) + ' ' + str(doc['familyName']) + '", givenName: "' + str(doc['givenName'])\
+        +'", familyName: "' + str(doc['familyName']) +'", url: "' + str(doc['url'])\
         + '", dateOfBirth: "' + str(doc['dateOfBirth']) + '", nationality: "' + str(doc['nationality']) + '"})'
         execution_commands.append(neo4j_create_node_statemenet)
 

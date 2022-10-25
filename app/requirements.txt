@@ -1,0 +1,10 @@
+python-dotenv==0.21.0
+dnspython==2.2.1
+pymongo==4.3.2
+requests==2.28.1 
+pandas==1.5.1
+ipykernel==6.16.1
+neo4j==5.1.0
+flask==2.2.2
+werkzeug
+Flask-Session
