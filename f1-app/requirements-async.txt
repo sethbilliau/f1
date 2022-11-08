@@ -1,0 +1,13 @@
+fastapi==0.85.1
+# starlette is a dependency of fastapi, but we also use it directly for some
+# lower-level things. Hence, we want to list it explicitly but leave its
+# version unspecified so that what ever version matches the one of fastapi will
+# be installed.
+starlette
+
+# from neo4j base app: https://github.com/neo4j-examples/movies-python-bolt
+neo4j==5.0.0a2
+uvicorn==0.19.0
+
+# my specific requirements
+dotenv==0.21.0

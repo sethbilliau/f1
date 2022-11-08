@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Link to the CSS and Icon -->
+        <link type="image/png" sizes="96x96" rel="icon" href="{{ url_for('static', path='/icons8-f1-car-96.png') }}">
+        <link href="{{ url_for('static', path='/css/mintstyles.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', path='/css/loader.css') }}" rel="stylesheet">
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+        <title>F1 Team Orders</title>
+    </head>
+
+    <body>
+        <div id="loader"> 
+            <!-- Loader by Anubhav Singh at https://codepen.io/Anu016/pen/yLBrjWr--> 
+                        <!-- svg describing the loader
+            made up of dashes and the race car
+            -->
+            <svg viewBox="0 0 178 40" width="178" height="40">
+                <!-- dash included behind the car
+                ! be sure to delay the animation of the path after the dashes on the right side of the car
+                -->
+                <path
+                    class="air"
+                    d="M 46 16.5 h -20 a 8 8 0 0 1 0 -16"
+                    fill="none"
+                    stroke="#E85725"
+                    stroke-width="1"
+                    stroke-linejoin="round"
+                    stroke-linecap="round">
+                </path>
+
+                <!-- wrap the svg describing the car in a group
+                this to translate the car horizontally within the wrapping svg
+                -->
+                <g id="car">
+                    <!-- svg describing the race car in a container 118 wide and 28.125 tall
+                    .125 due to the 2.25 width of the stroke
+
+                    position in the bottom center of the wrapping svg
+                    -->
+                    <svg viewBox="0 0 118 28.125" x="30" y="11.725" width="118" height="28.125">
+                        <defs>
+                            <!-- circle repeated for the wheel -->
+                            <circle
+                                id="circle"
+                                cx="0"
+                                cy="0"
+                                r="1">
+                            </circle>
+                            <!-- wheel
+                            three overlapping circles describing the parts of the wheel
+                            in between the circles add path elements to detail the graphic
+                            -->
+                            <g id="wheel">
+                                <use href="#circle" fill="#1E191A" transform="scale(10)"></use>
+                                <use href="#circle" fill="#fff" transform="scale(5)"></use>
+                                <!-- inner shadow -->
+                                <path
+                                    fill="#1E191A"
+                                    stroke="#1E191A"
+                                    stroke-width="0.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    opacity="0.2"
+                                    stroke-dashoffset="0"
+                                    d="M -3.5 0 a 4 4 0 0 1 7 0 a 3.5 3.5 0 0 0 -7 0">
+                                </path>
+                                <use href="#circle" fill="#1E191A" transform="scale(1.5)"></use>
+                                <!-- yellow stripe
+                                include stroke-dasharray values totalling the circumference of the circle
+                                this to use the dash-offset property and have the stripe rotate around the center while keeping its shape
+                                ! explicitly set the stroke-dashoffset property to 0 for the other path elements (in this way the stroke-dashoffset attribute added through the <use> element affects only this path)
+                                -->
+                                <path
+                                    fill="none"
+                                    stroke="#F9B35C"
+                                    stroke-width="0.75"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-dasharray="20 14 8 5"
+                                    d="M 0 -7.5 a 7.5 7.5 0 0 1 0 15 a 7.5 7.5 0 0 1 0 -15">
+                                </path>
+                                <!-- outer glow (from a hypothetical light source) -->
+                                <path
+                                    fill="none"
+                                    stroke="#fff"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    opacity="0.1"
+                                    stroke-dashoffset="0"
+                                    d="M -6.5 -6.25 a 10 10 0 0 1 13 0 a 9 9 0 0 0 -13 0">
+                                </path>
+                            </g>
+                        </defs>
+                        <!-- group describing the pilot's helmet
+                        translate in the middle of the cockpit
+                        -->
+                        <g transform="translate(51.5 11.125)">
+                            <path
+                                stroke-width="2"
+                                stroke="#1E191A"
+                                fill="#EF3F33"
+                                d="M 0 0 v -2 a 4.5 4.5 0 0 1 9 0 v 2">
+                            </path>
+                            <rect
+                                fill="#1E191A"
+                                x="3.25"
+                                y="-3"
+                                width="5"
+                                height="3">
+                            </rect>
+                        </g>
+
+                        <!-- group describing the car -->
+                        <g transform="translate(10 24.125)">
+                            <!-- shadow below the car
+                            ! change the transform-origin of the shadow to animate it from the top center
+                            the idea is to skew the shadow as the car moves
+                            -->
+                            <g transform="translate(59 0)">
+                                <path
+                                    id="shadow"
+                                    opacity="0.7"
+                                    fill="#1E191A"
+                                    d="M -64 0 l -4 4 h 9 l 8 -1.5 h 100 l -3.5 -2.5">
+                                </path>
+                            </g>
+                            <!-- path describing the frame of the car
+                            ! do not add a stroke at the bottom of the frame
+                            additional lines are overlapped to detail the belly of the vehicle
+                            -->
+                            <path
+                                fill="#fff"
+                                stroke="#1E191A"
+                                stroke-width="2.25"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M 0 0 v -10 l 35 -13 v 5 l 4 0.5 l 0.5 4.5 h 35.5 l 30 13">
+                            </path>
+
+                            <!-- wings -->
+                            <g
+                                fill="#fff"
+                                stroke="#1E191A"
+                                stroke-width="2.25"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M -6 0 v -22 h 10 z">
+                                </path>
+                                <path
+                                    d="M 105 0 h -3 l -12 -5.2 v 6.2 h 12">
+                                </path>
+                            </g>
+
+                            <!-- grey areas to create details around the car's dashes -->
+                            <g
+                                fill="#949699"
+                                opacity="0.7">
+                                <rect
+                                    x="16"
+                                    y="-6"
+                                    width="55"
+                                    height="6">
+                                </rect>
+                                <path
+                                    d="M 24 -14 l 13 -1.85 v 1.85">
+                                </path>
+                            </g>
+
+                            <!-- dashes included sparingly on top of the frame -->
+                            <g
+                                fill="none"
+                                stroke="#1E191A"
+                                stroke-width="2.25"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    stroke-dasharray="30 7 42"
+                                    d="M 90 0 h -78">
+                                </path>
+                                <path
+                                    d="M 39.5 -13 h -15">
+                                </path>
+                            </g>
+
+                            <!-- elements describing the side of the car -->
+                            <path
+                                fill="#fff"
+                                stroke="#1E191A"
+                                stroke-width="2.25"
+                                stroke-linejoin="round"
+                                d="M 48.125 -6 h -29 v 6 h 29"><!-- .125 to tuck the path behind the rectangle and avoid a pixel disconnect as the svg is scaled -->
+                            </path>
+
+                            <rect
+                                x="48"
+                                y="-7.125"
+                                width="6.125"
+                                height="7.125"
+                                fill="#1E191A">
+                            </rect>
+
+                            <!-- rear view mirror -->
+                            <g fill="#1E191A">
+                                <rect
+                                    x="60"
+                                    y="-15"
+                                    width="1"
+                                    height="6">
+                                </rect>
+                                <rect
+                                    x="56.5"
+                                    y="-17.5"
+                                    width="6"
+                                    height="2.5">
+                                </rect>
+                            </g>
+                        </g>
+
+                        <!-- group describing the wheels, positioned at the bottom of the graphic and at either end of the frame -->
+                        <g class="wheels" transform="translate(0 18.125)">
+                            <g transform="translate(10 0)">
+                                <use href="#wheel"></use>
+                            </g>
+
+                            <g transform="translate(87 0)">
+                                <!-- add an offset to rotate the yellow stripe around the center -->
+                                <use href="#wheel" stroke-dashoffset="-22"></use>
+                            </g>
+                        </g>
+                    </svg>
+                </g>
+
+                <!-- dashes included above and around the race car
+                ! include them in order from right to left
+                this allows to rapidly assign an increasing delay in the script, to have the dashes animated in sequence
+                -->
+                <g
+                    fill="none"
+                    stroke-width="1"
+                    stroke-linejoin="round"
+                    stroke-linecap="round">
+                    <!-- right side -->
+                    <path
+                        class="air"
+                        stroke="#E85725"
+                        d="M 177.5 34 h -10 q -16 0 -32 -8">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 167 28.5 c -18 -2 -22 -8 -37 -10.75">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 153 20 q -4 -1.7 -8 -3">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#E85725"
+                        d="M 117 16.85 c -12 0 -12 16 -24 16 h -8"><!-- around (117 29.85) where the right wheel is centered -->
+                    </path>
+
+                    <!-- left side -->
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 65 12 q -5 3 -12 3.8">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        stroke-dasharray="9 10"
+                        d="M 30 13.5 h -2.5 q -5 0 -5 -5">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 31 33 h -10">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 29.5 23 h -12">
+                    </path>
+                    <path
+                        class="air"
+                        stroke="#949699"
+                        d="M 13.5 23 h -6">
+                    </path>
+
+                    <path
+                        class="air"
+                        stroke="#E85725"
+                        d="M 28 28 h -27.5">
+                    </path>
+                </g>
+            </svg>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="/">Team Orders!</a>
+
+
+            <!-- TODO Evaluate: This Toggler button might be unnecessary -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" id="nav-tutorial">Tutorial</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/explore">Graph</a></li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" id="nav-support">Support</a></li>
+                        <li class="nav-item"><a class="nav-link" id="show_soln">Show Solution</a></li>
+                    </ul>
+            </div>
+        </nav>
+
+
+        <div id="container">
+            <div id="game">
+                <div id="board">
+                  <div id="game_prompt">
+                    <h4>
+                      <span>Connect </span>
+                      <span class="game-prompt-player" id="prompt_player_1"></span>
+                      <span> to </span>
+                      <span class="game-prompt-player" id="prompt_player_2"></span>
+                      <span> through mutual teammates</span>
+                    </h4>
+                  </div>
+                  <div id="player-pool">
+                    <div id="pool-row-start" class="pool-row game-start">
+                        <span id="start_driver"></span>
+                    </div>
+                    <div id="pool-row-1" class="pool-row" data-active-pool-row=""></div>
+                    <div id="pool-row-2" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-3" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-4" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-5" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-6" class="pool-row" data-hidden-pool-row=""></div>
+                    <div class="search-container" id="search-container">
+                        
+                          <div id="search-results-container">
+                            
+                              <div id="auto-complete-results">
+                                  <div id="search_stats"></div>
+                                  <input type="submit" class="auto-complete-result" id="result-0">
+                                  <input type="submit" class="auto-complete-result" id="result-1">
+                                  <input type="submit" class="auto-complete-result" id="result-2">
+                                  <input type="submit" class="auto-complete-result" id="result-3">
+                                  <input type="submit" class="auto-complete-result" id="result-4">
+                              </div>
+
+                              <div id="search-wrapper">
+                                  <input
+                                          type="text"
+                                          name="searchBar"
+                                          id="search_bar"
+                                          autocomplete="off"
+                                          placeholder="search for a player"/>
+                              </div>
+                            </div>
+
+                    </div>
+                    <div id="pool-row-end" class="pool-row game-end">
+                        <span id="final_driver"></span>
+                    </div>
+                  </div>
+                </div>
+                <div id="remaining_guesses">
+                    <h3>
+                        <span class="remaining-guesses-text">( Remaining Guesses: </span>
+                        <span class="remaining-guesses-number" id="remaining_guesses_number"></span> )
+                    </h3>
+                </div>
+              </div>
+
+            </div>
+        <div class="modal-container" id="modal_container">
+            <div class="modal">
+                <div id="close_btn_wrapper" class="btn_wrapper">
+                    <button id="close_button" class="close_button">x</button>
+                </div>
+                <div id="modal_top">
+                    <h1>You won!</h1>
+                    <div id="solution">
+                    </div>
+                    <div id="graph_wrapper">
+                    </div>
+                </div>
+ 
+ 
+            </div>
+        </div>
+        <div id="tutorial-container">
+            <div id="tutorial-modal">
+                <div id="tutorial-modal-close" class="btn_wrapper">
+                    <button id="tutorial-modal-close-button" class="close_button">x</button>
+                </div>
+                <div id="tutorial-content">
+                    <h1>How to Play</h1>
+                    <p class="tutorial-text">Connect two F1 drivers through 6 or fewer mutual teammates.</p>
+                    <div class="line-break"></div>
+                    <div class="tutorial-text small" id="tutorial-example-title">
+                        <span id="tutorial-example-bold">Example:</span>
+                            Connect 
+                        <span class="tutorial-example-bold">Lewis Hamilton</span> 
+                            to 
+                        <span class="tutorial-example-bold">Max Verstappen</span>
+                    </div>
+                    <div class="tutorial-game">
+                        <div class="tutorial-pool-row highlight">Lewis Hamilton</div>
+                        <div class="tutorial-pool-row correct">Jenson Button</div>
+                        <div class="tutorial-pool-row incorrect">Pierre Gasly</div>
+                        <div class="tutorial-pool-row winner">Sergio Pérez</div>
+                        <div class="tutorial-pool-row highlight">Max Verstappen</div>
+                    </div>
+                    <div class="tutorial-guess">Guess 1: <span class="tutorial-correct">Jenson Button</span></div>
+                    <div class="tutorial-text small example">Correct - Lewis Hamilton and Jenson Button were teammates at McLaren from 2010-2012. Jenson and Max were never teammates, so the game continues.</div>
+                    <div class="tutorial-guess">Guess 2: <span class="tutorial-incorrect">Pierre Gasly</span></div>
+                    <div class="tutorial-text small example">Incorrect - Jenson Button and Pierre Gasly were never teammates.</div>
+                    <div class="tutorial-guess">Guess 3: <span class="tutorial-correct">Sergio Pérez</span></div>
+                    <div class="tutorial-text small example">Correct - Jenson Button and Sergio Pérez were teammates at McLaren in 2013. Sergio Pérez and Max Verstappen were/are teammates at Red Bull from 2021-2022, so the game is over.</div>
+                </div>
+            </div>
+        </div>
+        <div id="support_modal_container">
+            <div id="support_modal">
+                <div id="support_modal_close" class="btn_wrapper">
+                    <button id="support_modal_close_button" class="close_button">x</button>
+                </div>
+                <div id="support_text">
+                    <h1 id="support_title">ABOUT</h1>
+                    <p class="support-copy">Dribble is a passion project created by <a href="https://twitter.com/taylor_stein" target="_blank" style="color:#0000EE">Taylor Stein</a>, a hoops fanatic in sunny San Diego, CA ☀️</p>
+                    <p class="support-copy">💖 Love playing Dribble and want to show your support? You can help fuel these late nights and early evenings by donating me a coffee below.</p>
+                    <p class="support-copy" id="coffee-link">
+                        <a href="https://www.buymeacoffee.com/taylorstein" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy Taylor a Coffee&amp;emoji=&amp;slug=taylorstein&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Lato&amp;outline_colour=000000&amp;coffee_colour=ffffff"></a>
+                    </p>
+                    <p class="support-copy">Last, and certainly not least, special thank you to all of my friends who have helped bring this project to life. This game wouldn't be the same without your help, and y'all are the real MVPs.</p>
+                </div>
+            </div>
+        </div>
+        <script src="https://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+        <script src="static/js/drivers.js"></script>
+        <script src="static/js/gameplay.js"></script>
+        <script src="static/js/loader.js"></script>
+
+
+        <footer class="small text-center text-muted footer">
+            Site by <a href="https://sethbilliau.com/">Seth B</a>, heavily inspired by <a href="https://dribblegame.com/">NBA Dribble</a> by <a href="https://twitter.com/taylor_stein">Taylor Stein.</a> Icon by <a href='https://icons8.com/'>icons8</a>. 
+        </footer>
+
+
+    </body>
+</html>

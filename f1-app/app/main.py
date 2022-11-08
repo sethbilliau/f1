@@ -1,6 +1,16 @@
 # 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from werkzeug.exceptions import default_exceptions
+from dotenv import dotenv_values
+from logging.config import dictConfig
+import logging
+from pathlib import Path
+import os 
+
+# Get environment variables 
+NEO_URI = os.environ.get("NEO_URI")
+NEO_USER = os.environ.get("NEO_USER")
+NEO_PW = os.environ.get("NEO_PW")
 
 # Configure application
 app = Flask(__name__)
@@ -12,16 +22,13 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("index.html")    
     else:
-        # Get inputs from form
-        if not request.form.get("count"):
-            return apology("invalid input", 400)
-        count = request.form.get("count")
-        method = request.form.get("how")
-
-        return redirect("/method")
-
+        form = request.form
+        print(form)
+        jsdata = request.json   
+        print(jsdata)
+        return render_template('index.html')
 
 # Handle random domains apologies 
 def errorhandler(e):

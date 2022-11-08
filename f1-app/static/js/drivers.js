@@ -1,6 +1,6 @@
-console.log("suggestions.js");
+console.log("drivers.js");
 
-let allDrivers = [
+const allDrivers = [
     'Carlo Abate',
     'George Abecassis',
     'Kenny Acheson',
