@@ -105,6 +105,9 @@ async def get_graph(limit: Optional[int] = 2, driver: Optional[str] = None):
         return [record_ async for record_ in result]
 
     def add_node(newNode: dict, names_: list, nodes_: list, nodesSet_: set):
+        """
+        Add a new driver's node to the list of nodes, names, and nodesSet
+        """
         names_.append(newNode["fullName"])
         nodes_.append({"id": names_.index(newNode["fullName"]), "label": newNode["fullName"]})
         nodesSet_.add(newNode["fullName"])
