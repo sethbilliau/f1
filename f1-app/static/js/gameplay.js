@@ -306,7 +306,7 @@ async function buildSolution(nameList) {
 
 
 async function drawGraph(limit, driver){ 
-    // limit = 1
+    limit = 1
     // const width = document.getElementById('graph_wrapper').offsetWidth;
     // const height = document.getElementById('graph_wrapper').offsetHeight; 
     
