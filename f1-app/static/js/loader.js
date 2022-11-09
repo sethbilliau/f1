@@ -1,3 +1,9 @@
+/*
+Loader Section 
+
+This code is used for the fun F1 car page loader that is displayed before the page is fully 
+ready to be displayed to the user. 
+*/
 
 // target all path elements describing the gusts of air around the race car
 const paths = document.querySelectorAll('path.air');
