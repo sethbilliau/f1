@@ -104,6 +104,12 @@ async def get_graph(limit: Optional[int] = 2, driver: Optional[str] = None):
         )
         return [record_ async for record_ in result]
 
+    def add_node(newNode: dict, names_: list, nodes_: list, nodesSet_: set):
+        names_.append(newNode["fullName"])
+        nodes_.append({"id": names_.index(newNode["fullName"]), "label": newNode["fullName"]})
+        nodesSet_.add(newNode["fullName"])
+        return (names_, nodes_, nodesSet_)
+
     async with get_db() as db:
         results = await db.execute_read(work, limit, driver)
         nodesSet = set()
@@ -112,16 +118,12 @@ async def get_graph(limit: Optional[int] = 2, driver: Optional[str] = None):
         rels = []
         for starting_node, _, ending_node in results:
             if starting_node["fullName"] not in nodesSet:
-                nodes.append({"title": starting_node["fullName"], "label": "driver"})
-                names.append(starting_node["fullName"])
-                nodesSet.add(starting_node["fullName"])
+                names, nodes, nodesSet = add_node(starting_node, names, nodes, nodesSet)
 
             if ending_node["fullName"] not in nodesSet:
-                nodes.append({"title": ending_node["fullName"], "label": "driver"})
-                names.append(ending_node["fullName"])
-                nodesSet.add(ending_node["fullName"])
+                names, nodes, nodesSet = add_node(ending_node, names, nodes, nodesSet)
 
-                rels.append({"source": names.index(starting_node["fullName"]), "target": names.index(ending_node['fullName'])})
+                rels.append({"from": names.index(starting_node["fullName"]), "to": names.index(ending_node['fullName'])})
 
         return {"nodes": nodes, "links": rels}
 

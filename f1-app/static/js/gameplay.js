@@ -23,8 +23,6 @@ const solutionEl = document.querySelector("#solution");
 const modalX = document.querySelector("#close_button");
 const showStatsNavEl = document.querySelector("#show_soln");
 const graphWrapperEl = document.querySelector("#graph_wrapper");
-// const shareSocial = document.querySelector("#share_social");
-
 
 
 // Get the number of remaining guesses
@@ -93,6 +91,7 @@ function searchForDrivers(e){
             button.innerHTML = potentialDrivers[i];
         }
 
+        // If the limit is less than 5, hide buttons limit through 5
         if (limit < 5){
             for (let i = limit; i < 5; i++){
                 let button = searchWrapper.querySelector("#result-" + i);
@@ -101,21 +100,21 @@ function searchForDrivers(e){
             }
         }
 
+        // If the limit is equal to 1, hide the final row to remove an annoyingly-formatted line. 
         if (limit === 1){ 
             hideFinalRow()
         } else {
             unhideFinalRow()
         }
 
-        let searchStats = document.querySelector("#search_stats");
+        // Show search stats unless there are no more potential drivers
         if (potentialDrivers.length === 0) {
             searchStats.innerHTML = "";
         } else {
             searchStats.innerHTML = limit + ' of ' + potentialDrivers.length.toString() + ' results for "' + userData + '"';
         }
     } else { 
-
-        // Delete Results 
+        // Delete autocomplete results text if there's nothing to display 
         for (let i = 0; i < 5; i++){
             let button = searchWrapper.querySelector("#result-" + i);
             button.value = "";
@@ -133,7 +132,7 @@ async function buttonHandler() {
     let candidateDriver = this.textContent;
 
     // Give input box the correct value
-    // inputBox.value = candidateDriver
+    // inputBox.value = candidateDriver - TODO decide if the we are checking joke is funny 
     inputBox.value = "wE aRe ChEcKiNg..."
 
     // Increment the guess counter  
@@ -165,7 +164,6 @@ async function buttonHandler() {
     // Remove active row tag
     currentRow.removeAttribute("data-active-pool-row");
     currentRow.setAttribute("data-guess-result", guessCorrectness);
-
     
     // If the game is continuing
     if (REMAINING_GUESSES > 0 && guessCorrectness !== "winner"){
@@ -341,43 +339,35 @@ async function drawGraph(limit, driver){
     const width = document.getElementById('graph_wrapper').offsetWidth;
     const height = document.getElementById('graph_wrapper').offsetHeight; 
 
-    const force = d3.layout.force()
-            .charge(-200).linkDistance(30).size([width, height]);
-    
-    const svg = d3.select("#graph_wrapper").append("svg")
-            .attr("width", "100%").attr("height", "100%")
-            .attr("pointer-events", "all");
     
     d3.json("/graph?limit=" + encodeURIComponent(limit) + "&driver=" + encodeURIComponent(driver), function(error, graph) {
         if (error) return;
-        console.log(graph)
-        force.nodes(graph.nodes).links(graph.links).start();
-    
-        const link = svg.selectAll(".link")
-                .data(graph.links).enter()
-                .append("line").attr("class", "link");
-    
-        const node = svg.selectAll(".node")
-                .data(graph.nodes).enter()
-                .append("circle")
-                .attr("class", function (d) { return "node "+d.label })
-                .attr("r", 10)
-                .call(force.drag);
-    
-        // html title attribute
-        node.append("title")
-                .text(function (d) { return d.title; })
-    
-        // force feed algo ticks
-        force.on("tick", function() {
-            link.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-    
-            node.attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; });
-        });
+        var nodesArray, nodes, edgesArray, edges, network;
+        
+
+        function startNetwork() {
+
+                // create an array with nodes
+                nodesArray = graph.nodes
+                nodes = new vis.DataSet(nodesArray);
+
+                // create an array with edges
+                edgesArray = graph.links
+                edges = new vis.DataSet(edgesArray);
+
+                // create a network
+                var container = document.getElementById("graph_wrapper");
+                var data = {
+                    nodes: nodes,
+                    edges: edges,
+                };
+                var options = {};
+                    network = new vis.Network(container, data, options);
+                }
+
+
+                startNetwork();
+
     });
 }
 

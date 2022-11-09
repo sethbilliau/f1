@@ -325,7 +325,8 @@ h1 {
 
 #graph_wrapper{
   width: 100%; 
-  height: 20rem;
+  height: 25rem;
+  border: 1px solid rgb(71, 71, 71);
 }
 
 #tutorial-container {

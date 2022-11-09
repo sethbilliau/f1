@@ -21,6 +21,7 @@ paths.forEach((path, index) => {
 });
 
 
+// Hide loader once the page is loaded 
 document.onreadystatechange = function() {
   if (document.readyState !== "complete") {
       document.querySelector(
