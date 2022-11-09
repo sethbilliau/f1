@@ -1,4 +1,10 @@
-console.log("drivers.js");
+/*
+Drivers 
+
+This code defines a list of the 855 drivers that have competed in Formula One. Since this list
+doesn't actually change very often, I'm keeping it here so that I don't have to query the database
+while searching for drivers in the autocomplete section of the game. 
+*/
 
 const allDrivers = [
     'Carlo Abate',

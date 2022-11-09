@@ -1,4 +1,10 @@
-console.log("script.js")
+/*
+Gamplay Section
+
+This section handles the gameplay for the Team Orders game. 
+*/
+
+console.log("Loading gamplay.js")
 
 // Define variables
 let MAX_GUESSES = 6;
@@ -20,8 +26,6 @@ const searchStats = document.querySelector("#search_stats");
 const finalRow = document.querySelector('#pool-row-end');
 const statsModal = document.querySelector("#modal_container");
 const solutionEl = document.querySelector("#solution");
-const modalX = document.querySelector("#close_button");
-const showStatsNavEl = document.querySelector("#show_soln");
 const graphWrapperEl = document.querySelector("#graph_wrapper");
 
 
@@ -302,38 +306,6 @@ async function buildSolution(nameList) {
 }
 
 
-function showModalSlow() {
-    statsModal.style.visibility = "visible";
-    statsModal.classList.add("show");
-
-    showSolution();
-};
-
-function showModalFast() {
-    statsModal.style.visibility = "visible";
-    statsModal.classList.add("show");
-    statsModal.classList.add("fast");
-    
-    showSolution();
-};
-
-
-function hideModal() {
-    statsModal.style.visibility = "hidden";
-    if (statsModal.classList.contains('show')){
-        statsModal.classList.remove("show");
-    }
-    
-    if (statsModal.classList.contains('fast')){ 
-        statsModal.classList.remove("fast");
-    }
-
-    // Clear solution
-    solutionEl.innerHTML = ""
-    graphWrapperEl.innerHTML = ""
-};
-
-
 async function drawGraph(limit, driver){ 
     limit = 1
     const width = document.getElementById('graph_wrapper').offsetWidth;
@@ -364,14 +336,10 @@ async function drawGraph(limit, driver){
                 var options = {};
                     network = new vis.Network(container, data, options);
                 }
-
-
                 startNetwork();
 
     });
 }
-
-
 
 // Search for drivers on each key in the input box 
 inputBox.onkeyup = searchForDrivers
@@ -385,48 +353,3 @@ button1.onclick = buttonHandler;
 button2.onclick = buttonHandler;
 button3.onclick = buttonHandler;
 button4.onclick = buttonHandler;
-
-// Close button and nav bar for solution modal container
-modalX.onclick = hideModal;
-showStatsNavEl.onclick = showModalFast;
-
-
-
-// Tutorial Container 
-const tutorialX = document.getElementById("tutorial-modal-close-button")
-const tutorialContainer = document.getElementById("tutorial-container");
-const navTutorial = document.getElementById("nav-tutorial");
-
-function showTutorialModal() {
-    tutorialContainer.style.visibility = "visible";
-    tutorialContainer.classList.add("show");
-    tutorialContainer.classList.remove("hidden");
-}
-
-tutorialX.onclick = function(){
-    tutorialContainer.style.visibility = "hidden";
-    tutorialContainer.classList.add("hidden");
-    tutorialContainer.classList.remove("show");
-}
-
-navTutorial.onclick = showTutorialModal
-
-
-// Support Container 
-const supportX = document.getElementById("support_modal_close_button")
-const supportContainer = document.getElementById("support_modal_container");
-const navSupport = document.getElementById("nav-support");
-
-function showSupportModal() {
-    supportContainer.style.visibility = "visible";
-    supportContainer.classList.add("show");
-    supportContainer.classList.remove("hidden");
-}
-
-supportX.onclick = function(){
-    supportContainer.style.visibility = "hidden";
-    supportContainer.classList.add("hidden");
-    supportContainer.classList.remove("show");
-}
-
-navSupport.onclick = showSupportModal
