@@ -240,7 +240,6 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver, current
     // unhide final row if necessary
     unhideFinalRow()
 
-
     return(result)
 }
 
@@ -307,36 +306,35 @@ async function buildSolution(nameList) {
 
 
 async function drawGraph(limit, driver){ 
-    limit = 1
-    const width = document.getElementById('graph_wrapper').offsetWidth;
-    const height = document.getElementById('graph_wrapper').offsetHeight; 
-
+    // limit = 1
+    // const width = document.getElementById('graph_wrapper').offsetWidth;
+    // const height = document.getElementById('graph_wrapper').offsetHeight; 
     
     d3.json("/graph?limit=" + encodeURIComponent(limit) + "&driver=" + encodeURIComponent(driver), function(error, graph) {
         if (error) return;
         var nodesArray, nodes, edgesArray, edges, network;
-        
-
         function startNetwork() {
 
-                // create an array with nodes
-                nodesArray = graph.nodes
-                nodes = new vis.DataSet(nodesArray);
+            // create an array with nodes
+            nodesArray = graph.nodes
+            nodes = new vis.DataSet(nodesArray);
 
-                // create an array with edges
-                edgesArray = graph.links
-                edges = new vis.DataSet(edgesArray);
+            // create an array with edges
+            edgesArray = graph.links
+            edges = new vis.DataSet(edgesArray);
 
-                // create a network
-                var container = document.getElementById("graph_wrapper");
-                var data = {
-                    nodes: nodes,
-                    edges: edges,
-                };
-                var options = {};
-                    network = new vis.Network(container, data, options);
-                }
-                startNetwork();
+            // create a network
+            let data = {
+                nodes: nodes,
+                edges: edges,
+            };
+
+            let options = {};
+
+            network = new vis.Network(graphWrapperEl, data, options);
+        }
+                
+        startNetwork();
 
     });
 }
