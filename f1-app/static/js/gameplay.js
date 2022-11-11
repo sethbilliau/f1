@@ -24,7 +24,7 @@ const button3 = document.querySelector("#result-3");
 const button4 = document.querySelector("#result-4");
 const searchStats = document.querySelector("#search_stats");
 const finalRow = document.querySelector('#pool-row-end');
-const statsModal = document.querySelector("#modal_container");
+const statsModal = document.querySelector("#solution_modal_container");
 const solutionEl = document.querySelector("#solution");
 const graphWrapperEl = document.querySelector("#graph_wrapper");
 
@@ -252,10 +252,10 @@ async function getSolution(STARTING_DRIVER, FINAL_DRIVER){
 
 async function showSolution(){
     // Unhide the solution modal container
-    document.querySelector("#modal_container").classList.add('show');
+    statsModal.classList.add('show');
 
     // Add winner class to the solution div
-    document.querySelector("#solution").classList.add('winner');
+    solutionEl.classList.add('winner');
 
     // Get current drivers' teammates
     let solutionNames = await getSolution(STARTING_DRIVER, FINAL_DRIVER);
