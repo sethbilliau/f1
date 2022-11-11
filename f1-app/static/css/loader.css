@@ -28,7 +28,7 @@
   46 roughly being the length of the longest path.air
   */
   #loader > svg {
-    width: 600px;
+    width: 37.5rem;
     height: auto;
     --stroke-dash: 46;
     --stroke-dash-negative: -46;
