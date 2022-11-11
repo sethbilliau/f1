@@ -64,7 +64,7 @@ async def get_search(q: Optional[str] = None):
     async def work(tx, q_):
         result = await tx.run(
             "MATCH (a:Driver {fullName: '" + q_ + "'} )"
-            "-[r:Teammate*1] -> (b) RETURN b.fullName"
+            "-[r:Teammate*1]-(b) RETURN b.fullName"
         )
         return [record[0] async for record in result]
     
@@ -99,7 +99,7 @@ async def get_graph(limit: Optional[int] = 2, driver: Optional[str] = None):
     async def work(tx, limit_, driver_):
         result = await tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
-            "'}) -[r:Teammate*1.." + str(limit_)+ "] -> (b) RETURN a, r, b "
+            "'}) -[r:Teammate*1.." + str(limit_)+ "]-(b) RETURN a, r, b "
             "LIMIT 300"
         )
         return [record_ async for record_ in result]

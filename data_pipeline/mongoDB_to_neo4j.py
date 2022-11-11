@@ -1,10 +1,7 @@
 # Import libraries
-import requests
-import json
 from datetime import datetime
 from datetime import date
 from pprint import pprint
-from pyergast_source.pyergast import pyergast as ergast
 from dotenv import dotenv_values
 from pymongo import MongoClient
 
@@ -29,12 +26,17 @@ def main():
         + '", dateOfBirth: "' + str(doc['dateOfBirth']) + '", nationality: "' + str(doc['nationality']) + '"})'
         execution_commands.append(neo4j_create_node_statemenet)
 
+    # teammate set to not duplicate relationships
+    teammatesSet = set()
+
     # Create all of the teammate relationships between nodes in the data set from the MongoDB
     for doc in dbDrivers.find({}):
         for teammate in doc['teammateSet']:
-            neo4j_create_teammate_statemenet = 'MATCH (a:Driver), (b:Driver) WHERE a.driverID = "' + str(doc['driverID'])\
-                + '" AND b.driverID = "' + teammate + '" CREATE (a)-[r:Teammate]->(b)'
-            execution_commands.append(neo4j_create_teammate_statemenet)
+            if teammate not in teammatesSet:
+                neo4j_create_teammate_statemenet = 'MATCH (a:Driver), (b:Driver) WHERE a.driverID = "' + str(doc['driverID'])\
+                    + '" AND b.driverID = "' + teammate + '" CREATE (a)-[r:Teammate]->(b)'
+                execution_commands.append(neo4j_create_teammate_statemenet)
+        teammatesSet.add(doc['driverID'])
 
     # Connect to the DB and Execute the commands 
     graphDB_Driver = getneo4jDBMS()

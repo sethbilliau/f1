@@ -7,17 +7,17 @@ Created on Thu Oct 20 11:23:11 2022
 """
 
 # Import libraries
-import requests
-import json
 from datetime import datetime
 from datetime import date
 from pprint import pprint
-from pyergast_source.pyergast import pyergast as ergast
 from dotenv import dotenv_values
 from pymongo import MongoClient
 
 # Import neo4j driver
-from neo4j import GraphDatabase
+from neo4j import (
+    GraphDatabase, 
+    basic_auth
+)
 
 
 def getMongoDB():
@@ -44,18 +44,23 @@ def getneo4jDBMS():
     # Get values from .env 
     config = dotenv_values('.env')
 
-    db_uri = config['NEO_URI']
-    db_user = config['NEO_USER']
-    db_pw = config['NEO_PW']
+    db_uri = config['NEO4J_URI']
+    db_user = config['NEO4J_USER']
+    db_pw = config['NEO4J_PW']
 
     # Connect to the DBMS DRIVER with the connection string
-    graphDB_Driver  = GraphDatabase.driver(db_uri, auth=(db_user, db_pw))
+    graphDB_Driver  = GraphDatabase.driver(db_uri, auth=basic_auth(db_user, db_pw))
 
     return graphDB_Driver
 
 
 def execute_neo_commands(execution_commands, graphDB_driver):
-    session = graphDB_driver.session()    
+    # Get values from .env 
+    config = dotenv_values('.env')
+
+    db_name = config['NEO4J_DATABASE']
+
+    session = graphDB_driver.session(database=db_name)    
     for i in execution_commands:
         session.run(i)
     
