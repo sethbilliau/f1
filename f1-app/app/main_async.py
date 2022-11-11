@@ -2,7 +2,6 @@
 from contextlib import asynccontextmanager
 import logging
 import os
-from tokenize import String
 from typing import Optional
 from dotenv import load_dotenv
 
@@ -165,4 +164,4 @@ if __name__ == "__main__":
     logging.root.setLevel(logging.INFO)
     logging.info("Starting on port %d, database is at %s", port, url)
 
-    uvicorn.run(app, port=port)
+    uvicorn.run(app, port=port, host="0.0.0.0")
