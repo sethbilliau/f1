@@ -43,6 +43,15 @@ nav .navbar-brand .green {
     color: #2e944b;
 }
 
+/* 404 message */
+#pikachu{
+  /* constrain images on small screens */
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* F1 Game Specific */
 #container {
   display: flex;
@@ -110,7 +119,6 @@ nav .navbar-brand .green {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* min-width: 400px; */
   max-width: 62.5rem;
   height: 100%;
   justify-content: space-between;
@@ -225,16 +233,9 @@ nav .navbar-brand .green {
   border-top: 1px solid rgb(148, 148, 148);
 }
 
-#pikachu{
-  /* constrain images on small screens */
-  max-width: 100%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 /* Winning modal */
-#modal_container {
+#solution_modal_container {
   background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
   width: 100vw;
@@ -243,15 +244,15 @@ nav .navbar-brand .green {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 50px;
+  padding-top: 3.125rem;
   pointer-events: none;
   opacity: 0;
   z-index: 50;
-  padding: 30px 30px 30px 30px;
+  padding: 1.875rem 1.875rem 1.875rem 1.875rem;
   visibility: hidden;
 }
 
-#modal_container.show {
+#solution_modal_container.show {
   pointer-events: auto;
   opacity: 1;
   transition: opacity 0.4s ease;
@@ -259,7 +260,7 @@ nav .navbar-brand .green {
   overflow: hidden;
 }
 
-#modal_container.show.fast {
+#solution_modal_container.show.fast {
   pointer-events: auto;
   opacity: 1;
   transition: opacity 0.1s ease;
@@ -268,29 +269,43 @@ nav .navbar-brand .green {
 
 .modal {
   width: 100%;
-  max-width: 600px;
+  max-height: 60rem;
+  max-width: 37.5rem;
   background-color: #f9f9f9;
   color: black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 5px 5px; 
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0.938rem;
+  padding-right: 0.938rem;
   border-radius: 3px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 3px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
   'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
   border: 1px solid rgb(71, 71, 71);
+  overflow-y: scroll;
+}
+
+#modal_top{
+  /* overflow: auto; */
+  height: 100%;
+}
+
+#graph_wrapper{
+  width: 100%; 
+  height: 70%;
+  border: 1px solid rgb(71, 71, 71);
+
 }
 
 #solution{
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding-top: 0.625rem;
+  padding-bottom: 1.25rem;
   color: black;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-style: italic;
 }
 
@@ -303,6 +318,8 @@ h1 {
   font-size: 2rem;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
 }
+
+
 
 .node { 
   stroke: #222; 
@@ -323,12 +340,6 @@ h1 {
   stroke-width: 1px; 
 }
 
-#graph_wrapper{
-  width: 100%; 
-  height: 25rem;
-  border: 1px solid rgb(71, 71, 71);
-}
-
 #tutorial-container {
   position: absolute;
   display: flex;
@@ -337,7 +348,7 @@ h1 {
   align-items: center;
   height: 100%;
   width: 100%;
-  padding: 30px 30px 30px 30px;
+  padding: 1.875rem 1.875rem 1.875rem 1.875rem;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 150;
   visibility: hidden;
@@ -345,8 +356,8 @@ h1 {
 
 #tutorial-modal {
   width: 100%;
-  max-width: 650px;
-  min-width: 300px;
+  max-width: 40.625rem;
+  min-width: 18.75rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
