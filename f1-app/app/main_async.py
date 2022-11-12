@@ -4,7 +4,8 @@ import logging
 import os
 from typing import Optional
 from dotenv import load_dotenv
-
+import random
+import pandas as pd
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -21,7 +22,10 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI()
 
-# Mount static to 
+# Mount templates 
+templates = Jinja2Templates(directory="templates")
+
+# Mount static
 app.mount(
     "/static",
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
@@ -38,6 +42,14 @@ port = os.getenv("PORT", 8080)
 
 driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
 
+def get_random_starting_ending_drivers(seed: Optional[int] = None):
+    if seed: 
+        random.seed(seed)
+    row_index = random.randint(0, 811)
+    gamesdf = pd.read_csv('app/data/pairings_limit3.csv')    
+    row = gamesdf.iloc[row_index]
+    return {'driver1': row['driver1'], 'driver2':row['driver2']}
+
 @asynccontextmanager
 async def get_db():
     if neo4j_version >= "4":
@@ -48,13 +60,18 @@ async def get_db():
             yield session_
 
 
-templates = Jinja2Templates(directory="templates")
-
-
 @app.get("/")
 async def root(request: Request):
+    data = get_random_starting_ending_drivers(42)
     return templates.TemplateResponse(
-        "index.html", {"request": request}
+        "index.html", {"request": request, "data": data}
+    )
+
+@app.get("/unlimited")
+async def root(request: Request):
+    data = get_random_starting_ending_drivers()
+    return templates.TemplateResponse(
+        "unlimited.html", {"request": request, "data": data}
     )
 
 

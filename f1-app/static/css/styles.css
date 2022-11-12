@@ -228,6 +228,7 @@ nav .navbar-brand .green {
 
 #search_stats {
   color: black;
+  background-color: #f9f9f9;
   font-size: 0.75rem;
   padding: 0.313rem 0.625rem;
   border-top: 1px solid rgb(148, 148, 148);
@@ -530,6 +531,10 @@ h1 {
   opacity: 1;
 }
 
+.support-copy {
+  text-align: left;
+
+}
 
 /* Close Button and Wrapper */
 .close_button {
@@ -547,4 +552,13 @@ h1 {
   justify-content: flex-end;
   width: 100%;
   padding-right: 9px;
+}
+
+#new_game {
+  display: flex; 
+  color: #5a5a5a;
+  text-align:center; 
+  margin:auto;
+  border-radius: 4px;
+  padding: 10px 24px
 }

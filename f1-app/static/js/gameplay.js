@@ -10,9 +10,9 @@ console.log("Loading gamplay.js")
 let MAX_GUESSES = 6;
 let GUESS_COUNTER = 0;
 let REMAINING_GUESSES = MAX_GUESSES - GUESS_COUNTER;
-let STARTING_DRIVER = "Lewis Hamilton";
-let CURRENT_DRIVER = STARTING_DRIVER;
-let FINAL_DRIVER = "Max Verstappen";
+let STARTING_DRIVER;
+let CURRENT_DRIVER;
+let FINAL_DRIVER;
 
 // Get certain elements and define them as constants
 const searchWrapper = document.querySelector(".search-container");
@@ -35,11 +35,10 @@ function getRemainingGuesses() {
 }
 
 // Fill in the names of the starting and final driver for the game board
-function getNamesForText() {
-    document.querySelector("#prompt_player_1").textContent = STARTING_DRIVER;
-    document.querySelector("#prompt_player_2").textContent = FINAL_DRIVER;
-    document.querySelector("#start_driver").textContent = STARTING_DRIVER;
-    document.querySelector("#final_driver").textContent = FINAL_DRIVER;
+function initializeDrivers() {
+    STARTING_DRIVER = document.querySelector("#prompt_player_1").textContent;
+    FINAL_DRIVER = document.querySelector("#prompt_player_2").textContent;
+    CURRENT_DRIVER = STARTING_DRIVER;
 }
 
 // Fill in the name of the current driver in the search bar
@@ -52,21 +51,21 @@ function searchBarNumber() {
     searchWrapper.classList.add("guess_num_" + (GUESS_COUNTER + 1))
 }
 
-// hide final row if needed
-function hideFinalRow() { 
-    finalRow.classList.add("hidden");
-}
+// // hide final row if needed
+// function hideFinalRow() { 
+//     finalRow.classList.add("hidden");
+// }
 
-// unhide final row if needed
-function unhideFinalRow() { 
-    if (finalRow.classList.contains('hidden')){
-        finalRow.classList.remove("hidden");
-    }
-}
+// // unhide final row if needed
+// function unhideFinalRow() { 
+//     if (finalRow.classList.contains('hidden')){
+//         finalRow.classList.remove("hidden");
+//     }
+// }
 
 // Initialize the game - to be called on load. 
 function initializeGame() {
-    getNamesForText();
+    initializeDrivers();
     getRemainingGuesses();
     searchBarName();
     searchBarNumber()
@@ -105,11 +104,11 @@ function searchForDrivers(e){
         }
 
         // If the limit is equal to 1, hide the final row to remove an annoyingly-formatted line. 
-        if (limit === 1){ 
-            hideFinalRow()
-        } else {
-            unhideFinalRow()
-        }
+        // if (limit === 1){ 
+        //     hideFinalRow()
+        // } else {
+        //     unhideFinalRow()
+        // }
 
         // Show search stats unless there are no more potential drivers
         if (potentialDrivers.length === 0) {
@@ -238,7 +237,7 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver, current
     }
 
     // unhide final row if necessary
-    unhideFinalRow()
+    // unhideFinalRow()
 
     return(result)
 }
@@ -268,7 +267,7 @@ async function buildSolution(nameList) {
     let titleSpan1 = document.createElement('span')
     titleSpan1.classList.add('italic')
     titleSpan1.textContent = "The shortest teammate path between " + STARTING_DRIVER + " and " + FINAL_DRIVER +
-                             " is " + String(nameList.length) + " teammates long."
+                             " is " + String(nameList.length - 2) + " teammate(s) long."
                         
     solutionEl.appendChild(titleSpan1)
     solutionEl.appendChild(document.createElement('br'))
