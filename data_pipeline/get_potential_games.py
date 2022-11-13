@@ -208,7 +208,8 @@ def main():
 
     pairingsList = []
     for driver1, driver2 in pairingSet:
-        pairingsList.append({'driver1':driver1, 'driver2': driver2})
+        if driver1 != driver2: 
+            pairingsList.append({'driver1':driver1, 'driver2': driver2})
 
     pprint(pairingsList)
     print(f"Length: {len(pairingsList)}")
