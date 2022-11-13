@@ -165,7 +165,9 @@ async def get_graph(
 
 @app.get("/explore")
 async def root(request: Request):
-    return "TODO"
+    return templates.TemplateResponse(
+        "graph.html", {"request": request}
+    )
 
 
 @app.exception_handler(StarletteHTTPException)
