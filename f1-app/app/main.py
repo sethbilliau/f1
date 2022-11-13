@@ -3,23 +3,32 @@ from contextlib import asynccontextmanager
 import logging
 import os
 from typing import Optional
-from dotenv import load_dotenv
-import random
-import pandas as pd
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
+
+# Import neo4j functions to access the data base
 from neo4j import (
     basic_auth,
     AsyncGraphDatabase,
 )
-from starlette.responses import FileResponse
+
+## Import starlette function to handle exceptions 
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-PATH = os.path.dirname(os.path.abspath(__file__))
+# Import pandas and random to select the game randomly
+import pandas as pd
+import random
 
+# Import dotenv functions to load environment variables 
+from dotenv import load_dotenv
+
+# Include Routers 
+from app.routers import explore
+
+# Create FastAPI app
 app = FastAPI()
 
 # Mount templates 
@@ -32,6 +41,7 @@ app.mount(
     name="static",
 )
 
+# Load environment variables 
 load_dotenv()
 url = os.getenv("NEO4J_URI", "neo4j+s://demo.neo4jlabs.com")
 username = os.getenv("NEO4J_USER", "movies")
@@ -40,7 +50,9 @@ neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "movies")
 port = os.getenv("PORT", 8080)
 
+# Access the data base driver - async
 driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
+
 
 def get_random_starting_ending_drivers(seed: Optional[int] = None):
     if seed: 
@@ -73,7 +85,6 @@ async def root(request: Request):
     return templates.TemplateResponse(
         "unlimited.html", {"request": request, "data": data}
     )
-
 
 @app.get("/search")
 async def get_search(q: Optional[str] = None):
@@ -163,12 +174,7 @@ async def get_graph(
         return {"nodes": nodes, "links": rels}
 
 
-@app.get("/explore")
-async def root(request: Request):
-    return templates.TemplateResponse(
-        "graph.html", {"request": request}
-    )
-
+app.include_router(explore.router)
 
 @app.exception_handler(StarletteHTTPException)
 async def my_custom_exception_handler(request: Request, exc: StarletteHTTPException):
