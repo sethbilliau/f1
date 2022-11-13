@@ -57,8 +57,8 @@ driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
 def get_random_starting_ending_drivers(seed: Optional[int] = None):
     if seed: 
         random.seed(seed)
-    row_index = random.randint(0, 811)
-    gamesdf = pd.read_csv('app/data/pairings_limit3.csv')    
+    gamesdf = pd.read_csv('app/data/pairings_limit3.csv')  
+    row_index = random.randint(0, gamesdf.shape[0])  
     row = gamesdf.iloc[row_index]
     return {'driver1': row['driver1'], 'driver2':row['driver2']}
 
