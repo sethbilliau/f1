@@ -1,0 +1,17 @@
+# Ignoring git and cache folders
+.git
+.cache
+
+# # Ignore Dockerfile
+# Dockerfile
+
+# Python 
+.ipynb_checkpoints
+
+# Ignore DS Store 
+.DS_Store
+
+# IPython
+profile_default/
+ipython_config.py
+
