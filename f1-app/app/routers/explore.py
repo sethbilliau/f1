@@ -11,5 +11,5 @@ router = APIRouter()
 @router.get("/explore")
 async def root(request: Request):
     return templates.TemplateResponse(
-        "graph.html", {"request": request}
+        "explore.html", {"request": request}
     )
