@@ -111,38 +111,54 @@ async def solve(start: Optional[str] = None, final: Optional[str] = None):
 
 
 @app.get("/graph")
-async def get_graph(limit: Optional[int] = 2, driver: Optional[str] = None):
-    async def work(tx, limit_, driver_):
+async def get_graph(
+        driver1: Optional[str] = None, 
+        driver2: Optional[str] = None,
+        driver3: Optional[str] = None,
+        driver4: Optional[str] = None,
+        driver5: Optional[str] = None):
+    async def work(tx, driver_):
         result = await tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
-            "'}) -[r:Teammate*1.." + str(limit_)+ "]-(b) RETURN a, r, b "
+            "'}) -[r:Teammate*1]-(b) RETURN a, r, b "
             "LIMIT 300"
         )
         return [record_ async for record_ in result]
 
-    def add_node(newNode: dict, names_: list, nodes_: list, nodesSet_: set):
+    def add_node(newNode: dict, names_: list, nodes_: list, nodesSet_: set, _driverList: list):
         """
         Add a new driver's node to the list of nodes, names, and nodesSet
         """
         names_.append(newNode["fullName"])
-        nodes_.append({"id": names_.index(newNode["fullName"]), "label": newNode["fullName"]})
+        if newNode["fullName"] in _driverList:
+            group = "path"
+        else: 
+            group = "nonpath"
+        nodes_.append({"id": names_.index(newNode["fullName"]), "label": newNode["fullName"], "group": group})
         nodesSet_.add(newNode["fullName"])
         return (names_, nodes_, nodesSet_)
 
+
     async with get_db() as db:
-        results = await db.execute_read(work, limit, driver)
+        driverList = [driver1, driver2, driver3, driver4, driver5]
         nodesSet = set()
         nodes = []
         names = []
-        rels = []
-        for starting_node, _, ending_node in results:
-            if starting_node["fullName"] not in nodesSet:
-                names, nodes, nodesSet = add_node(starting_node, names, nodes, nodesSet)
+        relsSet = set()
+        for driver in driverList: 
+            if driver: 
+                results = await db.execute_read(work, driver)
+                for starting_node, _, ending_node in results:
+                    if starting_node["fullName"] not in nodesSet:
+                        names, nodes, nodesSet = add_node(starting_node, names, nodes, nodesSet, driverList)
 
-            if ending_node["fullName"] not in nodesSet:
-                names, nodes, nodesSet = add_node(ending_node, names, nodes, nodesSet)
+                    if ending_node["fullName"] not in nodesSet:
+                        names, nodes, nodesSet = add_node(ending_node, names, nodes, nodesSet, driverList)
 
-                rels.append({"from": names.index(starting_node["fullName"]), "to": names.index(ending_node['fullName'])})
+                    relsSet.add(frozenset([names.index(starting_node["fullName"]), names.index(ending_node['fullName'])]))
+        
+        rels = [{"from": list(item)[0], "to": list(item)[1]} for item in list(relsSet)]
+
 
         return {"nodes": nodes, "links": rels}
 

@@ -1,1 +1,23 @@
-TODO
+
+{% extends "layout.html" %} 
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block page_content %}
+<main>         
+    <img alt="{{ top }}" id='pikachu' class="border" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.redd.it/xmulu1f6urt11.jpg" title="{{ top }}">
+</main>
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+
+
+{% endblock %} 
+
+    
