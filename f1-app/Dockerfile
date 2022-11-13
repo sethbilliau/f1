@@ -1,6 +1,6 @@
 FROM python:3.9
 
-WORKDIR /usr/src/
+WORKDIR /usr/src
 
 COPY . .
 RUN python -m pip install --upgrade pip

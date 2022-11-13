@@ -71,73 +71,9 @@
             </div>
 
     </div>
-    <div class="modal-container" id="solution_modal_container">
-        <div class="modal">
-            <div id="close_btn_wrapper" class="btn_wrapper">
-                <button id="close_button" class="close_button">x</button>
-            </div>
-            <div id="modal_top">
-                <h1 id="winning_title">You won!</h1>
-                <div id="solution">
-                </div>
-                <div id="graph_wrapper">
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-    <div id="tutorial-container">
-        <div class="modal" id="tutorial-modal" >
-            <div id="tutorial-modal-close" class="btn_wrapper">
-                <button id="tutorial-modal-close-button" class="close_button">x</button>
-            </div>
-            <div id="tutorial-content">
-                <h1>How to Play</h1>
-                <p class="tutorial-text">Connect two F1 drivers through 6 or fewer mutual teammates. </p>
-                <p class="tutorial-text">Two drivers are considered teammates if they have raced in at least 1 Formula 1 Grand Prix for the same constructor. Reserve/test drivers and free practice rookie stand-ins don't count unless they actually participated in the Sunday race!</p>
-                <div class="line-break"></div>
-                <div class="tutorial-text small" id="tutorial-example-title">
-                    <span id="tutorial-example-bold">Example:</span>
-                        Connect 
-                    <span class="tutorial-example-bold">Lewis Hamilton</span> 
-                        to 
-                    <span class="tutorial-example-bold">Max Verstappen</span>
-                </div>
-                <div class="tutorial-game">
-                    <div class="tutorial-pool-row highlight">Lewis Hamilton</div>
-                    <div class="tutorial-pool-row correct">Jenson Button</div>
-                    <div class="tutorial-pool-row incorrect">Pierre Gasly</div>
-                    <div class="tutorial-pool-row winner">Sergio Pérez</div>
-                    <div class="tutorial-pool-row highlight">Max Verstappen</div>
-                </div>
-                <div class="tutorial-guess">Guess 1: <span class="tutorial-correct">Jenson Button</span></div>
-                <div class="tutorial-text small example">Correct - Lewis Hamilton and Jenson Button were teammates at McLaren from 2010-2012. Jenson and Max were never teammates, so the game continues.</div>
-                <div class="tutorial-guess">Guess 2: <span class="tutorial-incorrect">Pierre Gasly</span></div>
-                <div class="tutorial-text small example">Incorrect - Jenson Button and Pierre Gasly were never teammates.</div>
-                <div class="tutorial-guess">Guess 3: <span class="tutorial-correct">Sergio Pérez</span></div>
-                <div class="tutorial-text small example">Correct - Jenson Button and Sergio Pérez were teammates at McLaren in 2013. Sergio Pérez and Max Verstappen were/are teammates at Red Bull from 2021-2022, so the game is over.</div>
-            </div>
-        </div>
-    </div>
-    <div id="support_modal_container">
-        <div class="modal" id="support_modal">
-            <div id="support_modal_close" class="btn_wrapper">
-                <button id="support_modal_close_button" class="close_button">x</button>
-            </div>
-            <div id="support_text">
-                <h1 id="support_title">ABOUT</h1>
-                <p class="support-copy">F1 Team Orders is brought to you by <a href="https://twitter.com/sethbilliau" target="_blank" style="color:#0000EE">Seth Billiau</a>, a new F1 fan from the Washington, DC, in the USA 🏎️.</p>
-                <br>
-                <p class="support-copy">If you're interested in supporting this project, you can help fuel these late nights by donating me a coffee (or Red Bull) below.</p>
-                <br>
-                <p class="support-copy" id="coffee-link">
-                    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy Seth a Coffee', '#29abe0', 'E1E4G9GRA');kofiwidget2.draw();</script> 
-                </p>
-                <!-- <p class="support-copy">Last, and certainly not least, special thank you to all of my friends who have helped bring this project to life. This game wouldn't be the same without your help, and y'all are the real MVPs.</p> -->
-            </div>
-        </div>
-    </div>
+    {% include 'include/solution_container.html' %}
+    {% include 'include/tutorial_container.html' %}
+    {% include 'include/support_container.html' %}
 {% endblock %}
 
 
