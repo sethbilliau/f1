@@ -23,7 +23,6 @@ const button2 = document.querySelector("#result-2");
 const button3 = document.querySelector("#result-3");
 const button4 = document.querySelector("#result-4");
 const searchStats = document.querySelector("#search_stats");
-const finalRow = document.querySelector('#pool-row-end');
 const statsModal = document.querySelector("#solution_modal_container");
 const solutionEl = document.querySelector("#solution");
 const graphWrapperEl = document.querySelector("#graph_wrapper");
@@ -50,18 +49,6 @@ function searchBarName() {
 function searchBarNumber() {
     searchWrapper.classList.add("guess_num_" + (GUESS_COUNTER + 1))
 }
-
-// // hide final row if needed
-// function hideFinalRow() { 
-//     finalRow.classList.add("hidden");
-// }
-
-// // unhide final row if needed
-// function unhideFinalRow() { 
-//     if (finalRow.classList.contains('hidden')){
-//         finalRow.classList.remove("hidden");
-//     }
-// }
 
 // Initialize the game - to be called on load. 
 function initializeGame() {
@@ -103,13 +90,6 @@ function searchForDrivers(e){
             }
         }
 
-        // If the limit is equal to 1, hide the final row to remove an annoyingly-formatted line. 
-        // if (limit === 1){ 
-        //     hideFinalRow()
-        // } else {
-        //     unhideFinalRow()
-        // }
-
         // Show search stats unless there are no more potential drivers
         if (potentialDrivers.length === 0) {
             searchStats.innerHTML = "";
@@ -124,10 +104,7 @@ function searchForDrivers(e){
             button.innerHTML = "";
             searchStats.innerHTML = "";
         }
-    }
-
-
-    
+    }  
 };
 
 async function buttonHandler() {
@@ -236,9 +213,6 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver, current
         result = "incorrect" 
     }
 
-    // unhide final row if necessary
-    // unhideFinalRow()
-
     return(result)
 }
 
@@ -265,13 +239,12 @@ async function showSolution(){
 async function buildSolution(nameList) {
 
     let titleSpan1 = document.createElement('span')
-    titleSpan1.classList.add('italic')
+    titleSpan1.classList.add('italic', 'solution-copy')
     titleSpan1.textContent = "The shortest teammate path between " + STARTING_DRIVER + " and " + FINAL_DRIVER +
                              " is " + String(nameList.length - 2) + " teammate(s) long."
                         
     solutionEl.appendChild(titleSpan1)
-    solutionEl.appendChild(document.createElement('br'))
-    solutionEl.appendChild(document.createElement('br'))
+
     // Add title
     let titleSpan2 = document.createElement('span')
     titleSpan2.classList.add('italic')
@@ -300,14 +273,35 @@ async function buildSolution(nameList) {
         }
     }
 
-    await drawGraph(nameList.length, STARTING_DRIVER);
+    // Add explanation
+    solutionEl.appendChild(document.createElement('br'))
+    solutionEl.appendChild(document.createElement('br'))
+    let titleSpan3 = document.createElement('span')
+    titleSpan3.classList.add('italic', 'solution-copy')
+    titleSpan3.textContent = "Explore this path using the graph below. Click and drag the bubbles and the canvas to rearrange the graph. Scroll to zoom."
+    solutionEl.appendChild(titleSpan3)
+
+    await drawGraph(nameList);
 }
 
 
-async function drawGraph(limit, driver){ 
-    limit = 1
+async function drawGraph(nameList){ 
+    let limit = nameList.length
     
-    d3.json("/graph?limit=" + encodeURIComponent(limit) + "&driver=" + encodeURIComponent(driver), function(error, graph) {
+    if (limit < 1 || limit > 5) {
+        throw new Error("Invalid Player List")
+    }
+
+    requestString = "/graph?"
+    for (let i = 0; i < limit; i++){
+        requestString = requestString.concat("driver", encodeURIComponent(i + 1), "=", encodeURIComponent(nameList[i]))
+        if (i != limit){
+            requestString = requestString.concat("&")
+        }
+    }
+    console.log(requestString)
+    
+    d3.json(requestString, function(error, graph) {
         if (error) return;
         var nodesArray, nodes, edgesArray, edges, network;
         function startNetwork() {
@@ -326,7 +320,12 @@ async function drawGraph(limit, driver){
                 edges: edges,
             };
 
-            let options = {};
+            var options = {
+                groups: {
+                  path: {color:{background:'lightblue'}},
+                  nonpath: {color:{background:'lightgray'}}
+                }
+              }
 
             network = new vis.Network(graphWrapperEl, data, options);
         }
