@@ -69,7 +69,7 @@ app.include_router(explore.router)
 
 @app.get("/")
 async def root(request: Request):
-    data = get_random_starting_ending_drivers(seed=42)
+    data = get_random_starting_ending_drivers(43)
     return templates.TemplateResponse(
         "index.html", {"request": request, "data": data}
     )
