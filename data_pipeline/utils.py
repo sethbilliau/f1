@@ -7,22 +7,19 @@ Created on Thu Oct 20 11:23:11 2022
 """
 
 # Import libraries
-from datetime import datetime
-from datetime import date
-from pprint import pprint
 from dotenv import dotenv_values
 from pymongo import MongoClient
 
 # Import neo4j driver
 from neo4j import (
-    GraphDatabase, 
+    GraphDatabase,
     basic_auth
 )
 
 
 def getMongoDB():
 
-    # Get values from .env 
+    # Get values from .env
     config = dotenv_values('.env')
 
     db_uri = config['MONGO_URI']
@@ -32,7 +29,7 @@ def getMongoDB():
 
     # Connect to the database with the connection string
     client = MongoClient(f'mongodb+srv://{db_user}:{db_pw}@{db_uri}')
-    
+
     # Get the data base name
     db = client.get_database(db_name)
 
@@ -41,7 +38,7 @@ def getMongoDB():
 
 def getneo4jDBMS():
 
-    # Get values from .env 
+    # Get values from .env
     config = dotenv_values('.env')
 
     db_uri = config['NEO4J_URI']
@@ -49,30 +46,23 @@ def getneo4jDBMS():
     db_pw = config['NEO4J_PW']
 
     # Connect to the DBMS DRIVER with the connection string
-    graphDB_Driver  = GraphDatabase.driver(db_uri, auth=basic_auth(db_user, db_pw))
+    graphDB_Driver = GraphDatabase.driver(db_uri,
+                                          auth=basic_auth(db_user, db_pw))
 
     return graphDB_Driver
 
 
 def execute_neo_commands(execution_commands, graphDB_driver):
-    # Get values from .env 
+    # Get values from .env
     config = dotenv_values('.env')
 
     db_name = config['NEO4J_DATABASE']
 
-    session = graphDB_driver.session(database=db_name)    
+    session = graphDB_driver.session(database=db_name)
     for i in execution_commands:
         session.run(i)
-    
+
     return
-
-
-# def get_shortest_path(driver1, driver2, graphDB_driver):
-#     shortestPathQuery = 'MATCH (p1:Driver { driverID: "' + driver1\
-#         + '"} }),(p2:Driver { driverID: "' + driver2 + '" }), path = shortestPath((p1)-[*..15]-(p2)) RETURN path'''
-#     session = graphDB_driver.session()   
-
-#     session.run(shortestPathQuery)
 
 
 if __name__ == "__main__":
