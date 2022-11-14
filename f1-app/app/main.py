@@ -150,7 +150,7 @@ async def get_graph(
                                                           driverList)
 
                     if ending_node["fullName"] not in nodesSet:
-                        names, nodes, nodesSet = add_node(starting_node, names,
+                        names, nodes, nodesSet = add_node(ending_node, names,
                                                           nodes, nodesSet,
                                                           driverList)
 
