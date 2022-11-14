@@ -15,22 +15,22 @@ from neo4j import (
     AsyncGraphDatabase,
 )
 
-## Import starlette function to handle exceptions 
+# Import starlette function to handle exceptions
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# Import dotenv functions to load environment variables 
+# Import dotenv functions to load environment variables
 from dotenv import load_dotenv
 
-# Include Routers 
+# Include Routers
 from app.routers import explore
 
 # Import all helper functions
-from app.library.helpers import *
+from app.library.helpers import get_random_starting_ending_drivers, add_node
 
 # Create FastAPI app
 app = FastAPI()
 
-# Mount templates 
+# Mount templates
 templates = Jinja2Templates(directory="templates")
 
 # Mount static
@@ -40,7 +40,7 @@ app.mount(
     name="static",
 )
 
-# Load environment variables 
+# Load environment variables
 load_dotenv()
 url = os.getenv("NEO4J_URI", "neo4j+s://demo.neo4jlabs.com")
 username = os.getenv("NEO4J_USER", "movies")
@@ -52,6 +52,7 @@ port = os.getenv("PORT", 8080)
 # Access the data base driver - async
 driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
 
+
 @asynccontextmanager
 async def get_db():
     if neo4j_version >= "4":
@@ -62,6 +63,10 @@ async def get_db():
             yield session_
 
 
+# Add router to the explore page
+app.include_router(explore.router)
+
+
 @app.get("/")
 async def root(request: Request):
     data = get_random_starting_ending_drivers(seed=42)
@@ -69,12 +74,14 @@ async def root(request: Request):
         "index.html", {"request": request, "data": data}
     )
 
+
 @app.get("/unlimited")
-async def root(request: Request):
+async def unlimited(request: Request):
     data = get_random_starting_ending_drivers()
     return templates.TemplateResponse(
         "unlimited.html", {"request": request, "data": data}
     )
+
 
 @app.get("/search")
 async def get_search(q: Optional[str] = None):
@@ -84,7 +91,7 @@ async def get_search(q: Optional[str] = None):
             "-[r:Teammate*1]-(b) RETURN b.fullName"
         )
         return [record[0] async for record in result]
-    
+
     if q is None:
         return []
     async with get_db() as db:
@@ -97,9 +104,10 @@ async def get_search(q: Optional[str] = None):
 async def solve(start: Optional[str] = None, final: Optional[str] = None):
     async def work(tx, start_, final_):
         result = await tx.run(
-            "MATCH (p1:Driver { fullName: '" + start_ +"' }),"
+            "MATCH (p1:Driver { fullName: '" + start_ + "' }),"
             "(p2:Driver { fullName: '" + final_ + "' }),"
-            "path = shortestPath((p1)-[*..15]-(p2)) RETURN [x in nodes(path) | x.fullName]"
+            "path = shortestPath((p1)-[*..15]-(p2))"
+            "RETURN [x in nodes(path) | x.fullName]"
         )
         return [record[0] async for record in result]
 
@@ -113,7 +121,7 @@ async def solve(start: Optional[str] = None, final: Optional[str] = None):
 
 @app.get("/graph")
 async def get_graph(
-        driver1: Optional[str] = None, 
+        driver1: Optional[str] = None,
         driver2: Optional[str] = None,
         driver3: Optional[str] = None,
         driver4: Optional[str] = None,
@@ -132,28 +140,33 @@ async def get_graph(
         nodes = []
         names = []
         relsSet = set()
-        for driver in driverList: 
-            if driver: 
+        for driver in driverList:
+            if driver:
                 results = await db.execute_read(work, driver)
                 for starting_node, _, ending_node in results:
                     if starting_node["fullName"] not in nodesSet:
-                        names, nodes, nodesSet = add_node(starting_node, names, nodes, nodesSet, driverList)
+                        names, nodes, nodesSet = add_node(starting_node, names,
+                                                          nodes, nodesSet,
+                                                          driverList)
 
                     if ending_node["fullName"] not in nodesSet:
-                        names, nodes, nodesSet = add_node(ending_node, names, nodes, nodesSet, driverList)
+                        names, nodes, nodesSet = add_node(starting_node, names,
+                                                          nodes, nodesSet,
+                                                          driverList)
 
-                    relsSet.add(frozenset([names.index(starting_node["fullName"]), names.index(ending_node['fullName'])]))
-        
-        rels = [{"from": list(item)[0], "to": list(item)[1]} for item in list(relsSet)]
+                    relsSet.add(frozenset(
+                            [names.index(starting_node["fullName"]),
+                             names.index(ending_node['fullName'])]
+                        ))
 
-
+        rels = [{"from": list(item)[0],
+                 "to": list(item)[1]} for item in list(relsSet)]
         return {"nodes": nodes, "links": rels}
 
 
-app.include_router(explore.router)
-
 @app.exception_handler(StarletteHTTPException)
-async def my_custom_exception_handler(request: Request, exc: StarletteHTTPException):
+async def my_custom_exception_handler(request: Request,
+                                      exc: StarletteHTTPException):
     # Handle HTTPExceptions here
     return apology(request, exc)
 
@@ -171,7 +184,9 @@ def apology(request: Request, exc: StarletteHTTPException):
             s = s.replace(old, new)
         return s
     return templates.TemplateResponse(
-        "apology.html", {"request": request, "top": exc.status_code, "bottom": escape(exc.detail)}
+        "apology.html", {"request": request,
+                         "top": exc.status_code,
+                         "bottom": escape(exc.detail)}
     )
 
 
