@@ -132,3 +132,5 @@ dmypy.json
 pyergast_source
 .DS_Store
 scratch.ipynb
+f1-app/.eslintrc.js
+f1-app/static/js/.eslintrc.json

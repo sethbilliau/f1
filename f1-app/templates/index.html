@@ -30,28 +30,24 @@
                 <div id="pool-row-5" class="pool-row" data-hidden-pool-row=""></div>
                 <div id="pool-row-6" class="pool-row" data-hidden-pool-row=""></div>
                 <div class="search-container" id="search-container">
-                    
-                        <div id="search-results-container">
-                        
-                            <div id="auto-complete-results">
-                                <div id="search_stats"></div>
-                                <input type="submit" class="auto-complete-result" id="result-0">
-                                <input type="submit" class="auto-complete-result" id="result-1">
-                                <input type="submit" class="auto-complete-result" id="result-2">
-                                <input type="submit" class="auto-complete-result" id="result-3">
-                                <input type="submit" class="auto-complete-result" id="result-4">
-                            </div>
-
-                            <div id="search-wrapper">
-                                <input
-                                        type="text"
-                                        name="searchBar"
-                                        id="search_bar"
-                                        autocomplete="off"
-                                        placeholder="search for a player"/>
-                            </div>
+                    <div id="search-results-container">
+                        <div id="auto-complete-results">
+                            <div id="search_stats"></div>
+                            <input type="submit" class="auto-complete-result" id="result-0">
+                            <input type="submit" class="auto-complete-result" id="result-1">
+                            <input type="submit" class="auto-complete-result" id="result-2">
+                            <input type="submit" class="auto-complete-result" id="result-3">
+                            <input type="submit" class="auto-complete-result" id="result-4">
                         </div>
-
+                        <div id="search-wrapper">
+                            <input
+                                    type="text"
+                                    name="searchBar"
+                                    id="search_bar"
+                                    autocomplete="off"
+                                    placeholder="search for a player"/>
+                        </div>
+                    </div>
                 </div>
                 <div id="pool-row-end" class="pool-row game-end">
                     <span id="final_driver">{{data.driver2}}</span>
@@ -63,13 +59,10 @@
                     </h3>
                 </div>
                 </div>
-                
             </div>
-            
             {% block new_game %}
             {% endblock %}
             </div>
-
     </div>
     {% include 'include/solution_container.html' %}
     {% include 'include/tutorial_container.html' %}
@@ -79,6 +72,5 @@
 
 {% block scripts %}
 {{ super() }}
-
 
 {% endblock %}
