@@ -18,15 +18,14 @@ from neo4j import (
 ## Import starlette function to handle exceptions 
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# Import pandas and random to select the game randomly
-import pandas as pd
-import random
-
 # Import dotenv functions to load environment variables 
 from dotenv import load_dotenv
 
 # Include Routers 
 from app.routers import explore
+
+# Import all helper functions
+from app.library.helpers import *
 
 # Create FastAPI app
 app = FastAPI()
@@ -53,15 +52,6 @@ port = os.getenv("PORT", 8080)
 # Access the data base driver - async
 driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
 
-
-def get_random_starting_ending_drivers(seed: Optional[int] = None):
-    if seed: 
-        random.seed(seed)
-    gamesdf = pd.read_csv('app/data/pairings_limit3.csv')  
-    row_index = random.randint(0, gamesdf.shape[0])  
-    row = gamesdf.iloc[row_index]
-    return {'driver1': row['driver1'], 'driver2':row['driver2']}
-
 @asynccontextmanager
 async def get_db():
     if neo4j_version >= "4":
@@ -74,7 +64,7 @@ async def get_db():
 
 @app.get("/")
 async def root(request: Request):
-    data = get_random_starting_ending_drivers(42)
+    data = get_random_starting_ending_drivers(seed=42)
     return templates.TemplateResponse(
         "index.html", {"request": request, "data": data}
     )
@@ -135,20 +125,6 @@ async def get_graph(
             "LIMIT 300"
         )
         return [record_ async for record_ in result]
-
-    def add_node(newNode: dict, names_: list, nodes_: list, nodesSet_: set, _driverList: list):
-        """
-        Add a new driver's node to the list of nodes, names, and nodesSet
-        """
-        names_.append(newNode["fullName"])
-        if newNode["fullName"] in _driverList:
-            group = "path"
-        else: 
-            group = "nonpath"
-        nodes_.append({"id": names_.index(newNode["fullName"]), "label": newNode["fullName"], "group": group})
-        nodesSet_.add(newNode["fullName"])
-        return (names_, nodes_, nodesSet_)
-
 
     async with get_db() as db:
         driverList = [driver1, driver2, driver3, driver4, driver5]
