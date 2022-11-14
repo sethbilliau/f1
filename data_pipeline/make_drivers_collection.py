@@ -7,32 +7,28 @@ Created on Thu Oct 20 11:23:11 2022
 """
 
 # Import libraries
-import requests
 import json
-from datetime import datetime
-from datetime import date
-from pprint import pprint
 from pyergast_source.pyergast import pyergast as ergast
-from dotenv import dotenv_values
-from pymongo import MongoClient
 
-# import functions from utils 
+# import functions from utils
 from utils import getMongoDB
 
 
-def main(): 
+def main():
 
     db = getMongoDB()
 
-    # Get a pandas dataframe of all drivers from ergast, rename driverId to driverID
+    # Get pandas df of all drivers from ergast, rename driverId to driverID
     all_drivers = ergast.get_drivers().rename(columns={"driverId": "driverID"})
 
-    # initialize a list of all drivers 
+    # initialize a list of all drivers
     allDriversList = []
     for idx, driver in all_drivers.iterrows():
-        
+
         # drop permanentNumber and code entries, convert to JSON
-        driverJSON = json.loads(json.dumps(driver.drop(['permanentNumber', 'code']).to_dict()))
+        driverJSON = json.loads(json.dumps(driver.drop(
+                ['permanentNumber', 'code']).to_dict())
+            )
 
         # Append Driver to the list of all drivers
         allDriversList.append(driverJSON)
@@ -49,7 +45,7 @@ def main():
     # Make the driverId a unique index in the data set
     db_drivers.create_index("driverID", unique=True)
 
-    return 
+    return
 
 
 if __name__ == '__main__':

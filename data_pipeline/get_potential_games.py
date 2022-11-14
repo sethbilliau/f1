@@ -11,7 +11,7 @@ from pprint import pprint
 import pandas as pd
 from dotenv import dotenv_values
 
-# import functions from utils 
+# import functions from utils
 from utils import getneo4jDBMS
 
 
@@ -38,7 +38,7 @@ currentDrivers = [
     'Guanyu Zhou',
 ]
 
-worldChamps = [    
+worldChamps = [
     'Nino Farina',
     'Alberto Ascari',
     'Juan Fangio',
@@ -175,15 +175,16 @@ otherDrivers = [
 
 LIMIT = 3
 
-def main(): 
+
+def main():
     def work(tx, driver_):
         result = tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
-            "'}) -[r:Teammate*2.." + str(LIMIT)+ "]-(b) RETURN b.fullName "
+            "'}) -[r:Teammate*2.." + str(LIMIT) + "]-(b) RETURN b.fullName"
         )
         return [record[0] for record in result]
 
-    # Get values from .env 
+    # Get values from .env
     config = dotenv_values('.env')
 
     db_name = config['NEO4J_DATABASE']
@@ -195,21 +196,21 @@ def main():
     driverSet = set()
     obscureDrivers = set()
 
-    for driver in currentDrivers: 
+    for driver in currentDrivers:
         paired_drivers = db_session.execute_read(work, driver)
         for pair in paired_drivers:
             # Don't add duplicates
-            if pair not in driverSet: 
-                if pair in otherDrivers or pair in currentDrivers: 
+            if pair not in driverSet:
+                if pair in otherDrivers or pair in currentDrivers:
                     pairingSet.add((driver, pair))
-                else: 
+                else:
                     obscureDrivers.add(pair)
         driverSet.add(driver)
 
     pairingsList = []
     for driver1, driver2 in pairingSet:
-        if driver1 != driver2: 
-            pairingsList.append({'driver1':driver1, 'driver2': driver2})
+        if driver1 != driver2:
+            pairingsList.append({'driver1': driver1, 'driver2': driver2})
 
     pprint(pairingsList)
     print(f"Length: {len(pairingsList)}")
@@ -217,7 +218,7 @@ def main():
 
     pairingsDF = pd.DataFrame(pairingsList)
     pairingsDF.to_csv(f'../f1-app/app/data/pairings_limit{str(LIMIT)}.csv')
-    return 
+    return
 
 
 if __name__ == '__main__':
