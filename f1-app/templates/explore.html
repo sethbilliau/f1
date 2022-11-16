@@ -8,8 +8,35 @@
 
 {% block page_content %}
 
-<div id="graph_wrapper">
-
+<div class="row">
+    <div class="col-xs-10 col-sm-3">
+        <h2 class="explore-copy">Explore driver networks.</h2>
+        <p class="explore-copy">TODO</p>
+        <p id="add-driver-copy"> Add a driver and their teammates to the graph:</p>
+        <div class="search-container-explore" id="search-container-explore">
+            <div id="search-results-container">
+                <div id="auto-complete-results">
+                    <div id="search_stats"></div>
+                    <input type="submit" class="auto-complete-result" id="explore-result-0">
+                    <input type="submit" class="auto-complete-result" id="explore-result-1">
+                    <input type="submit" class="auto-complete-result" id="explore-result-2">
+                    <input type="submit" class="auto-complete-result" id="explore-result-3">
+                    <input type="submit" class="auto-complete-result" id="explore-result-4">
+                </div>
+                <div id="search-wrapper">
+                    <input
+                            type="text"
+                            name="searchBar"
+                            id="search_bar"
+                            autocomplete="off"
+                            placeholder="search for a player"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-10 col-sm-7">
+        <div id="graph_explore"></div>
+    </div>
 </div>
 {% include 'include/support_container.html' %}
 

@@ -572,3 +572,27 @@ h1 {
   width:2rem;
   height:2rem;
 }
+
+#graph_explore{
+  height:85vh;
+  width:74vw;
+  /* padding: 5px 5px 5px 5px; */
+  border: 1px solid rgb(71, 71, 71);
+}
+
+.explore-copy { 
+  padding: 0.625rem;
+}
+
+.search-container-explore {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  padding: 0.625rem;
+}
+
+#add-driver-copy {
+  padding-left: 0.625rem;
+}
