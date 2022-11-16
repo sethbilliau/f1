@@ -1,4 +1,4 @@
-/* global allDrivers, showModalSlow, d3, vis */
+/* global showModalSlow, drawGraph, searchForDrivers */
 /*
 Gamplay Section
 
@@ -56,52 +56,6 @@ function initializeGame() {
     getRemainingGuesses();
     searchBarName();
     searchBarNumber();
-}
-
-function searchForDrivers(e) {
-    // get user entered data
-    const userData = e.target.value;
-
-    // Begin autocomplete only if 2 or more characters are entered by user
-    if (userData && (userData.length > 1)) {
-        // Look for all names containing the input substring
-        const re = new RegExp(`${userData}.+$`, 'i');
-        const potentialDrivers = allDrivers.filter((e_) => e_.search(re) !== -1);
-
-        // Limit the number of potential drivers to display
-        const limit = Math.min(potentialDrivers.length, 5);
-
-        // Show the appropriate buttons
-        for (let i = 0; i < limit; i += 1) {
-            const button = searchWrapper.querySelector(`#result-${i}`);
-            button.value = potentialDrivers[i];
-            button.innerHTML = potentialDrivers[i];
-        }
-
-        // If the limit is less than 5, hide buttons limit through 5
-        if (limit < 5) {
-            for (let i = limit; i < 5; i += 1) {
-                const button = searchWrapper.querySelector(`#result-${i}`);
-                button.value = '';
-                button.innerHTML = '';
-            }
-        }
-
-        // Show search stats unless there are no more potential drivers
-        if (potentialDrivers.length === 0) {
-            searchStats.innerHTML = '';
-        } else {
-            searchStats.innerHTML = `${limit} of ${potentialDrivers.length.toString()} results for "${userData}"`;
-        }
-    } else {
-        // Delete autocomplete results text if there's nothing to display
-        for (let i = 0; i < 5; i += 1) {
-            const button = searchWrapper.querySelector(`#result-${i}`);
-            button.value = '';
-            button.innerHTML = '';
-            searchStats.innerHTML = '';
-        }
-    }
 }
 
 async function getTeammates(currentDriver) {
@@ -219,53 +173,6 @@ async function getSolution(STARTING_DRIVER_, FINAL_DRIVER_) {
         .then((responseJson) => responseJson);
 }
 
-async function drawGraph(nameList) {
-    const limit = nameList.length;
-
-    if (limit < 1 || limit > 5) {
-        throw new Error('Invalid Player List');
-    }
-
-    let requestString = '/graph?';
-    for (let i = 0; i < limit; i += 1) {
-        requestString = requestString.concat('driver', encodeURIComponent(i + 1), '=', encodeURIComponent(nameList[i]));
-        if (i !== limit) {
-            requestString = requestString.concat('&');
-        }
-    }
-
-    d3.json(requestString, (error, graph) => {
-        if (error) return;
-        let nodesArray; let nodes; let edgesArray; let edges; let network;
-        function startNetwork() {
-            // create an array with nodes
-            nodesArray = graph.nodes;
-            nodes = new vis.DataSet(nodesArray);
-
-            // create an array with edges
-            edgesArray = graph.links;
-            edges = new vis.DataSet(edgesArray);
-
-            // create a network
-            const data = {
-                nodes,
-                edges,
-            };
-
-            const options = {
-                groups: {
-                    path: { color: { background: 'lightblue' } },
-                    nonpath: { color: { background: 'lightgray' } },
-                },
-            };
-
-            network = new vis.Network(graphWrapperEl, data, options);
-        }
-
-        startNetwork();
-    });
-}
-
 async function buildSolution(nameList) {
     const titleSpan1 = document.createElement('span');
     titleSpan1.classList.add('italic', 'solution-copy');
@@ -309,7 +216,7 @@ async function buildSolution(nameList) {
     titleSpan3.textContent = 'Explore this path using the graph below. Click and drag the bubbles and the canvas to rearrange the graph. Scroll to zoom.';
     solutionEl.appendChild(titleSpan3);
 
-    await drawGraph(nameList);
+    await drawGraph(nameList, graphWrapperEl, options);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -327,7 +234,11 @@ async function showSolution() {
 }
 
 // Search for drivers on each key in the input box
-inputBox.onkeyup = searchForDrivers;
+function searchForDriversInputBox(e) {
+    return searchForDrivers(e, searchWrapper, searchStats);
+}
+
+inputBox.onkeyup = searchForDriversInputBox;
 
 // Call functions to initialize the game
 window.onload = initializeGame;
