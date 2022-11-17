@@ -62,7 +62,7 @@ async function drawGraph(nameList, element) {
 function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     if (e.keyCode > 36 && e.keyCode < 41) {
         // when arrow keys were pressed, do nothing
-        return false;
+        return;
     }
 
     // get user entered data
@@ -108,6 +108,4 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
             stats.innerHTML = '';
         }
     }
-
-    return 
 }
