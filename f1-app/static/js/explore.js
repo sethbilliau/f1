@@ -210,7 +210,8 @@ function clearGraph() {
     edges.map((e) => (edges.remove({ id: e.id })));
 }
 
-// Draw base graph
+
+// Draw Base Graph
 drawGraph(['Lewis Hamilton', 'Jenson Button', 'Sergio Perez', 'Max Verstappen'], graphExplore);
 
 // Input box for adding
