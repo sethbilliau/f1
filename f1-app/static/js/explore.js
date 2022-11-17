@@ -23,7 +23,7 @@ const button3Remove = document.querySelector('#explore-remove-result-3');
 const button4Remove = document.querySelector('#explore-remove-result-4');
 const clearButton = document.querySelector('#clear_graph');
 
-drawGraph(['Lewis Hamilton', 'Jenson Button', 'Sergio Pérez', 'Max Verstappen'], graphExplore);
+drawGraph(['Lewis Hamilton', 'Jenson Button', 'Sergio Perez', 'Max Verstappen'], graphExplore);
 
 // Search for drivers on each key in the input box
 function searchForDriversInputBoxAdd(e) {
@@ -211,6 +211,9 @@ function clearGraph() {
     nodes.map((e) => (nodes.remove({ id: e.id })));
     edges.map((e) => (edges.remove({ id: e.id })));
 }
+
+// Draw Base Graph
+drawGraph(['Lewis Hamilton', 'Jenson Button', 'Sergio Perez', 'Max Verstappen'], graphExplore);
 
 // Input box for adding
 inputBoxAdd.onkeyup = searchForDriversInputBoxAdd;
