@@ -26,7 +26,7 @@ currentDrivers = [
     'Kevin Magnussen',
     'Lando Norris',
     'Esteban Ocon',
-    'Sergio Pérez',
+    'Sergio Perez',
     'Daniel Ricciardo',
     'George Russell',
     'Carlos Sainz',
@@ -65,9 +65,9 @@ worldChamps = [
     'Michael Schumacher',
     'Damon Hill',
     'Jacques Villeneuve',
-    'Mika Häkkinen',
+    'Mika Hakkinen',
     'Fernando Alonso',
-    'Kimi Räikkönen',
+    'Kimi Raikkonen',
     'Lewis Hamilton',
     'Jenson Button',
     'Sebastian Vettel',
@@ -85,7 +85,7 @@ otherDrivers = [
     'Jules Bianchi',
     'Jack Brabham',
     'Martin Brundle',
-    'Sébastien Buemi',
+    'Sebastien Buemi',
     'Jenson Button',
     'Karun Chandhok',
     'Jim Clark',
@@ -96,7 +96,7 @@ otherDrivers = [
     'Jean-Denis Délétraz',
     'Lucas di Grassi',
     'Paul di Resta',
-    "Jérôme d'Ambrosio",
+    "Jerome d'Ambrosio",
     'Marcus Ericsson',
     'Juan Fangio',
     'Nino Farina',
@@ -108,13 +108,12 @@ otherDrivers = [
     'Antonio Giovinazzi',
     'Timo Glock',
     'Romain Grosjean',
-    'Esteban Gutiérrez',
-    'Mika Häkkinen',
+    'Esteban Gutierrez',
     'Brendon Hartley',
     'Nick Heidfeld',
     'Damon Hill',
     'Graham Hill',
-    'Nico Hülkenberg',
+    'Nico Hulkenberg',
     'Eddie Irvine',
     'Alan Jones',
     'Christian Klien',
@@ -138,7 +137,6 @@ otherDrivers = [
     'Nelson Piquet',
     'Nelson Piquet Jr.',
     'Alain Prost',
-    'Kimi Räikkönen',
     'Nico Rosberg',
     'Keke Rosberg',
     'Alexander Rossi',
@@ -152,7 +150,7 @@ otherDrivers = [
     'Jackie Stewart',
     'Jarno Trulli',
     'Stoffel Vandoorne',
-    'Jean-Éric Vergne',
+    'Jean-Eric Vergne',
     'Jos Verstappen',
     'Jacques Villeneuve',
     'Gilles Villeneuve',
@@ -170,7 +168,7 @@ otherDrivers = [
     'James Hunt',
     'Jody Scheckter',
     'Gerhard Berger',
-    'Sébastien Bourdais',
+    'Sebastien Bourdais',
 ]
 
 LIMIT = 3
@@ -201,7 +199,7 @@ def main():
         for pair in paired_drivers:
             # Don't add duplicates
             if pair not in driverSet:
-                if pair in otherDrivers or pair in currentDrivers:
+                if pair in otherDrivers or pair in currentDrivers or pair in worldChamps:
                     pairingSet.add((driver, pair))
                 else:
                     obscureDrivers.add(pair)
