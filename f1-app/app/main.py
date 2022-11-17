@@ -25,7 +25,11 @@ from dotenv import load_dotenv
 from app.routers import explore
 
 # Import all helper functions
-from app.library.helpers import get_random_starting_ending_drivers, add_node, namesListFull
+from app.library.helpers import (
+    get_random_starting_ending_drivers,
+    add_node,
+    namesListFull
+)
 
 # Create FastAPI app
 app = FastAPI()
@@ -158,10 +162,11 @@ async def get_graph(
                             [namesListFull.index(starting_node["fullName"]),
                              namesListFull.index(ending_node['fullName'])]
                         ))
-        
+
         rels = [{"from": min(list(item)),
-                 "to": max(list(item)), 
-                 "id":str(min(list(item))) + str(max(list(item)))} for item in list(relsSet)]
+                 "to": max(list(item)),
+                 "id": str(min(list(item))) +
+                str(max(list(item)))} for item in list(relsSet)]
         return {"nodes": nodes, "links": rels}
 
 
