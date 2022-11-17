@@ -71,7 +71,7 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     // Begin autocomplete only if 2 or more characters are entered by user
     if (userData && (userData.length > 1)) {
         // Look for all names containing the input substring
-        const re = new RegExp(`${userData}.+$`, 'i');
+        const re = new RegExp(`${userData}.+$|${userData}`, 'i');
         const potentialDrivers = allDrivers.filter((e_) => e_.search(re) !== -1);
 
         // Limit the number of potential drivers to display
