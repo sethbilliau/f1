@@ -5,8 +5,6 @@ Gamplay Section
 This section handles the gameplay for the Team Orders game.
 */
 
-console.log('Loading gamplay.js');
-
 // Define variables
 const MAX_GUESSES = 6;
 let GUESS_COUNTER = 0;
@@ -17,13 +15,13 @@ let FINAL_DRIVER;
 
 // Get certain elements and define them as constants
 const searchWrapper = document.querySelector('.search-container');
-const inputBox = document.querySelector('#search_bar');
+const inputBox = document.querySelector('.search_bar');
 const button0 = document.querySelector('#result-0');
 const button1 = document.querySelector('#result-1');
 const button2 = document.querySelector('#result-2');
 const button3 = document.querySelector('#result-3');
 const button4 = document.querySelector('#result-4');
-const searchStats = document.querySelector('#search_stats');
+const searchStats = document.querySelector('.search_stats');
 const statsModal = document.querySelector('#solution_modal_container');
 const solutionEl = document.querySelector('#solution');
 const graphWrapperEl = document.querySelector('#graph_wrapper');
@@ -216,7 +214,7 @@ async function buildSolution(nameList) {
     titleSpan3.textContent = 'Explore this path using the graph below. Click and drag the bubbles and the canvas to rearrange the graph. Scroll to zoom.';
     solutionEl.appendChild(titleSpan3);
 
-    await drawGraph(nameList, graphWrapperEl, options);
+    await drawGraph(nameList, graphWrapperEl);
 }
 
 // eslint-disable-next-line no-unused-vars

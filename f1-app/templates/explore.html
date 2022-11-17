@@ -12,27 +12,60 @@
     <div class="col-xs-10 col-sm-3">
         <h2 class="explore-copy">Explore driver networks.</h2>
         <p class="explore-copy">TODO</p>
-        <p id="add-driver-copy"> Add a driver and their teammates to the graph:</p>
-        <div class="search-container-explore" id="search-container-explore">
-            <div id="search-results-container">
-                <div id="auto-complete-results">
-                    <div id="search_stats"></div>
-                    <input type="submit" class="auto-complete-result" id="explore-result-0">
-                    <input type="submit" class="auto-complete-result" id="explore-result-1">
-                    <input type="submit" class="auto-complete-result" id="explore-result-2">
-                    <input type="submit" class="auto-complete-result" id="explore-result-3">
-                    <input type="submit" class="auto-complete-result" id="explore-result-4">
+        <p class="explore-copy-instruction" id="add-driver-copy"> Add a driver and their teammates to the graph:</p>
+        <div class="search-container-explore" id="search-container-explore-add">
+            <div class="search-results-container">
+                <div class="auto-complete-results">
+                    <div class="search_stats" id="search_stats_add"></div>
+                    <input type="submit" class="auto-complete-result" id="explore-add-result-0">
+                    <input type="submit" class="auto-complete-result" id="explore-add-result-1">
+                    <input type="submit" class="auto-complete-result" id="explore-add-result-2">
+                    <input type="submit" class="auto-complete-result" id="explore-add-result-3">
+                    <input type="submit" class="auto-complete-result" id="explore-add-result-4">
                 </div>
-                <div id="search-wrapper">
+                <div class="search-wrapper">
                     <input
                             type="text"
                             name="searchBar"
-                            id="search_bar"
+                            class="search_bar"
+                            id="search_bar_add"
                             autocomplete="off"
                             placeholder="search for a player"/>
                 </div>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
+        <p class="explore-copy-instruction" id="remove-driver-copy"> Remove a driver from the graph:</p>
+        <div class="search-container-explore" id="search-container-explore-remove">
+            <div class="search-results-container">
+                <div class="auto-complete-results">
+                    <div class="search_stats" id="search_stats_remove"></div>
+                    <input type="submit" class="auto-complete-result" id="explore-remove-result-0">
+                    <input type="submit" class="auto-complete-result" id="explore-remove-result-1">
+                    <input type="submit" class="auto-complete-result" id="explore-remove-result-2">
+                    <input type="submit" class="auto-complete-result" id="explore-remove-result-3">
+                    <input type="submit" class="auto-complete-result" id="explore-remove-result-4">
+                </div>
+                <div class="search-wrapper">
+                    <input
+                            type="text"
+                            class="search_bar"
+                            name="searchBar"
+                            id="search_bar_remove"
+                            autocomplete="off"
+                            placeholder="search for a player"/>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div id="clear_graph_container">
+            <button type="button" class="click-button" id="clear_graph">Clear Graph</button>
+        </div>
+        <br>
     </div>
     <div class="col-xs-10 col-sm-7">
         <div id="graph_explore"></div>

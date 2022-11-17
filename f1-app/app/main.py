@@ -158,9 +158,10 @@ async def get_graph(
                             [namesListFull.index(starting_node["fullName"]),
                              namesListFull.index(ending_node['fullName'])]
                         ))
-
-        rels = [{"from": list(item)[0],
-                 "to": list(item)[1]} for item in list(relsSet)]
+        
+        rels = [{"from": min(list(item)),
+                 "to": max(list(item)), 
+                 "id":str(min(list(item))) + str(max(list(item)))} for item in list(relsSet)]
         return {"nodes": nodes, "links": rels}
 
 

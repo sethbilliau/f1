@@ -136,7 +136,7 @@ nav .navbar-brand .green {
 }
 
 /*Search Container */
-#search-results-container {
+.search-results-container {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
@@ -145,13 +145,13 @@ nav .navbar-brand .green {
   z-index: 10;
 }
 
-#auto-complete-results {
+.auto-complete-results {
   display: flex;
   flex-direction: column-reverse;
   width: 100%;
 }
 
-#search_stats:empty {
+.search_stats:empty {
   display: none;
 }
 
@@ -167,6 +167,13 @@ nav .navbar-brand .green {
   color: black;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
   padding: 0.313rem 0.625rem;
+}
+
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 }
 
 #search-wrapper {
@@ -216,7 +223,7 @@ nav .navbar-brand .green {
   display: none;
 }
 
-#search_bar {
+.search_bar {
   height: 2.188rem;
   padding-left: 0.625rem;
   color: black;
@@ -226,7 +233,7 @@ nav .navbar-brand .green {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
 }
 
-#search_stats {
+.search_stats {
   color: black;
   background-color: #f9f9f9;
   font-size: 0.75rem;
@@ -573,12 +580,9 @@ h1 {
   height:2rem;
 }
 
-#graph_explore{
-  height:85vh;
-  width:74vw;
-  /* padding: 5px 5px 5px 5px; */
-  border: 1px solid rgb(71, 71, 71);
-}
+
+/* Explore Page */
+
 
 .explore-copy { 
   padding: 0.625rem;
@@ -593,6 +597,42 @@ h1 {
   padding: 0.625rem;
 }
 
-#add-driver-copy {
+#search-container-explore-add {
+  z-index: 2;
+}
+
+#search-container-explore-remove {
+  z-index: 1;
+}
+
+.explore-copy-instruction {
   padding-left: 0.625rem;
+  padding-bottom: 0rem;
+}
+
+#clear_graph_container{
+  display: flex;
+  justify-content: center;
+}
+
+.click-button {
+  display: flex;
+  justify-content: center;
+  color: #5a5a5a;
+  text-align: center; 
+  margin: auto;
+  border-radius: 4px;
+  padding: 10px 24px;
+}
+
+#graph_explore{
+  height:85vh;
+  width:74vw;
+  border: 1px solid rgb(71, 71, 71);
+}
+
+@media screen and (max-width: 645px) {
+  #graph_explore {
+    width: 100vw !important;
+  }
 }
