@@ -76,6 +76,7 @@ worldChamps = [
 
 otherDrivers = [
     'Jack Aitken',
+    'Michele Alboreto',
     'Jean Alesi',
     'Michael Andretti',
     'Mario Andretti',
@@ -90,9 +91,10 @@ otherDrivers = [
     'Jim Clark',
     'David Coulthard',
     'Anthony Davidson',
+    'Andrea de Cesaris',
     'Pedro de la Rosa',
     'Nyck de Vries',
-    'Jean-Denis Délétraz',
+    'Jean-Denis Deletraz',
     'Lucas di Grassi',
     'Paul di Resta',
     "Jerome d'Ambrosio",
@@ -110,6 +112,7 @@ otherDrivers = [
     'Esteban Gutierrez',
     'Brendon Hartley',
     'Nick Heidfeld',
+    'Johnny Herbert',
     'Damon Hill',
     'Graham Hill',
     'Nico Hulkenberg',
@@ -167,10 +170,11 @@ otherDrivers = [
     'James Hunt',
     'Jody Scheckter',
     'Gerhard Berger',
-    'Sébastien Bourdais',
+    'Sebastien Bourdais',
     'Felipe Nasr',
     'Roberto Merhi',
     'Will Stevens',
+
 ]
 
 LIMIT = 3
