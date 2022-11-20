@@ -39,7 +39,7 @@ templates = Jinja2Templates(directory="templates")
 # Mount static
 app.mount(
     "/static",
-    StaticFiles(directory="static"),
+    StaticFiles(directory= "static"),
     name="static",
 )
 
