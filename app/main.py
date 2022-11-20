@@ -7,7 +7,6 @@ from typing import Optional
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pathlib import Path
 
 # Import neo4j functions to access the data base
 from neo4j import (
@@ -40,7 +39,7 @@ templates = Jinja2Templates(directory="templates")
 # Mount static
 app.mount(
     "/static",
-    StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
+    StaticFiles(directory= "static"),
     name="static",
 )
 
