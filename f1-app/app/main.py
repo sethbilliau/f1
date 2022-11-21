@@ -7,7 +7,6 @@ from typing import Optional
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pathlib import Path
 
 # Import neo4j functions to access the data base
 from neo4j import (
@@ -28,7 +27,8 @@ from app.routers import explore
 from app.library.helpers import (
     get_random_starting_ending_drivers,
     add_node,
-    namesListFull
+    namesListFull,
+    get_starting_ending_drivers_from_s3
 )
 
 # Create FastAPI app
@@ -40,7 +40,7 @@ templates = Jinja2Templates(directory="templates")
 # Mount static
 app.mount(
     "/static",
-    StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
+    StaticFiles(directory="static"),
     name="static",
 )
 
@@ -52,6 +52,12 @@ password = os.getenv("NEO4J_PW", "movies")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "movies")
 port = os.getenv("PORT", 8080)
+
+AWS_REGION_NAME = os.getenv("AWS_REGION_NAME", "NONE")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "NONE")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "NONE")
+AWS_BUCKET = os.getenv("AWS_BUCKET", "NONE")
+AWS_KEY = os.getenv("AWS_KEY", "NONE")
 
 # Access the data base driver - async
 driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
@@ -73,7 +79,13 @@ app.include_router(explore.router)
 
 @app.get("/")
 async def root(request: Request):
-    data = get_random_starting_ending_drivers(43)
+    data = get_starting_ending_drivers_from_s3(
+        AWS_REGION_NAME,
+        AWS_ACCESS_KEY_ID,
+        AWS_SECRET_ACCESS_KEY,
+        AWS_BUCKET,
+        AWS_KEY
+    )
     return templates.TemplateResponse(
         "index.html", {"request": request, "data": data}
     )

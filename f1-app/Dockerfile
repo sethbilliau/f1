@@ -1,9 +1,12 @@
 FROM python:3.9
 
-WORKDIR /usr/src
+WORKDIR /code
 
-COPY . .
+COPY ./requirements.txt /code/requirements.txt
 RUN python -m pip install --upgrade pip
-RUN python -m pip install -r ./requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-CMD [ "python", "./app/main.py" ]
+COPY . /code/
+
+EXPOSE 8080
+CMD ["python", "app/main.py"]

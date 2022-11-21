@@ -220,7 +220,7 @@ def main():
     print(f"Length: {len(pairingsList)}")
     print(obscureDrivers)
 
-    pairingsDF = pd.DataFrame(pairingsList)
+    pairingsDF = pd.DataFrame(pairingsList).sample(frac=1).reset_index(drop=True)
     pairingsDF.to_csv(f'../f1-app/app/data/pairings_limit{str(LIMIT)}.csv')
     return
 

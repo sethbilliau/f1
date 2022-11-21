@@ -21,3 +21,6 @@ flake8
 pytest
 pytest-docker
 requests
+
+# AWS
+boto3
