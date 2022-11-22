@@ -25,6 +25,7 @@ const searchStats = document.querySelector('.search_stats');
 const statsModal = document.querySelector('#solution_modal_container');
 const solutionEl = document.querySelector('#solution');
 const graphWrapperEl = document.querySelector('#graph_wrapper');
+const resetButton = document.querySelector('#reset_game_div');
 
 // Get the number of remaining guesses
 function getRemainingGuesses() {
@@ -151,15 +152,14 @@ async function buttonHandler() {
         inputBox.focus();
         inputBox.select();
     } else {
-        searchWrapper.remove();
+        searchWrapper.style.visibility = 'hidden';
 
         if (guessCorrectness === 'winner') {
-            // Remove Remaining Guesses Counter
-            document.querySelector('#remaining_guesses').remove();
+            // Hide Remaining Guesses Counter
+            document.querySelector('#remaining_guesses').style.visibility = 'hidden';
 
             // show come back text
             document.querySelector('#come_back_daily').style.visibility = 'visible';
-            document.querySelector('#come_back_daily').classList.add('show');
 
             // show solution modal container
             showModalSlow();
@@ -183,6 +183,7 @@ async function buildSolution(nameList) {
     } is ${String(nameList.length - 2)} teammate(s) long.`;
 
     solutionEl.appendChild(titleSpan1);
+    solutionEl.appendChild(document.createElement('br'));
 
     // Add title
     const titleSpan2 = document.createElement('span');
@@ -241,6 +242,42 @@ function searchForDriversInputBox(e) {
     return searchForDrivers(e, searchWrapper, searchStats);
 }
 
+// Reset board 
+function resetBoard() {
+    // hide come back text
+    document.querySelector('#come_back_daily').style.visibility = 'hidden';
+
+    // show Remaining Guesses Counter
+    document.querySelector('#remaining_guesses').style.visibility = 'visible';
+
+    // Reset guess number
+    searchWrapper.classList.remove(`guess_num_${GUESS_COUNTER + 1}`);
+    searchWrapper.classList.add(`guess_num_1`);
+
+    for (let i = 2; i < 7; i = i + 1) {
+        // Get current Row
+        const currentRow = document.getElementById(`pool-row-${i}`);
+        currentRow.setAttribute('data-hidden-pool-row', "");
+        currentRow.removeAttribute('data-active-pool-row');
+        currentRow.removeAttribute('data-guess-result');
+    }
+
+    // Make the first row active
+    // Get current Row
+    const firstRow = document.getElementById(`pool-row-1`);
+    firstRow.removeAttribute('data-active-pool-row');
+    firstRow.removeAttribute('data-guess-result');
+    firstRow.setAttribute('data-active-pool-row', "");
+
+    // Reset guess counter and current driver
+    GUESS_COUNTER = 0;
+    CURRENT_DRIVER = STARTING_DRIVER; 
+    REMAINING_GUESSES = MAX_GUESSES; 
+
+    // Reset remaining guesses
+    getRemainingGuesses();
+}
+
 inputBox.onkeyup = searchForDriversInputBox;
 
 // Call functions to initialize the game
@@ -252,3 +289,7 @@ button1.onclick = buttonHandler;
 button2.onclick = buttonHandler;
 button3.onclick = buttonHandler;
 button4.onclick = buttonHandler;
+
+if (resetButton){
+    resetButton.onclick = resetBoard;
+}

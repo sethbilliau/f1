@@ -1,8 +1,13 @@
 {% extends "index.html" %} 
 
 {% block new_game %}
-<div id="new_game_div" class="btn-container" onclick="window.location.href = '/unlimited';">
-    <a href="/unlimited">
-    <button type="button" class="click-button" id="new_game">New Game</button></a>
+<div id="buttons_unlimited">
+    <div id="new_game_div" class="btn-container" onclick="window.location.href = '/unlimited';">
+        <a href="/unlimited">
+        <button type="button" class="click-button" id="new_game">New Game</button></a>
+    </div>
+    <div id="reset_game_div" class="btn-container">
+        <button type="button" class="click-button" id="reset_game">Reset Board</button>
+    </div>
 </div>
 {% endblock %}
