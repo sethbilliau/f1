@@ -11,59 +11,68 @@
         <div id="game">
             <div id="board">
                 <div id="game_prompt">
-                <h4>
-                    <span>Connect </span>
-                    <span class="game-prompt-player" id="prompt_player_1">{{data.driver1}}</span>
-                    <span> to </span>
-                    <span class="game-prompt-player" id="prompt_player_2">{{data.driver2}}</span>
-                    <span> through mutual teammates</span>
-                </h4>
+                    <h4>
+                        <span>Connect </span>
+                        <span class="game-prompt-player" id="prompt_player_1">{{data.driver1}}</span>
+                        <span> to </span>
+                        <span class="game-prompt-player" id="prompt_player_2">{{data.driver2}}</span>
+                        <span> through mutual teammates</span>
+                    </h4>
                 </div>
                 <div id="player-pool">
-                <div id="pool-row-start" class="pool-row game-start">
-                    <span id="start_driver">{{data.driver1}}</span>
-                </div>
-                <div id="pool-row-1" class="pool-row" data-active-pool-row=""></div>
-                <div id="pool-row-2" class="pool-row" data-hidden-pool-row=""></div>
-                <div id="pool-row-3" class="pool-row" data-hidden-pool-row=""></div>
-                <div id="pool-row-4" class="pool-row" data-hidden-pool-row=""></div>
-                <div id="pool-row-5" class="pool-row" data-hidden-pool-row=""></div>
-                <div id="pool-row-6" class="pool-row" data-hidden-pool-row=""></div>
-                <div class="search-container" id="search-container">
-                    <div class="search-results-container">
-                        <div class="auto-complete-results">
-                            <div class="search_stats" id="search_stats"></div>
-                            <input type="submit" class="auto-complete-result" id="result-0">
-                            <input type="submit" class="auto-complete-result" id="result-1">
-                            <input type="submit" class="auto-complete-result" id="result-2">
-                            <input type="submit" class="auto-complete-result" id="result-3">
-                            <input type="submit" class="auto-complete-result" id="result-4">
-                        </div>
-                        <div class="search-wrapper">
-                            <input
-                                    type="text"
-                                    name="searchBar"
-                                    class="search_bar"
-                                    id="search_bar"
-                                    autocomplete="off"
-                                    placeholder="search for a player"/>
+                    <div id="pool-row-start" class="pool-row game-start">
+                        <span id="start_driver">{{data.driver1}}</span>
+                    </div>
+                    <div id="pool-row-1" class="pool-row" data-active-pool-row=""></div>
+                    <div id="pool-row-2" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-3" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-4" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-5" class="pool-row" data-hidden-pool-row=""></div>
+                    <div id="pool-row-6" class="pool-row" data-hidden-pool-row=""></div>
+                    <div class="search-container" id="search-container">
+                        <div class="search-results-container">
+                            <div class="auto-complete-results">
+                                <div class="search_stats" id="search_stats"></div>
+                                <input type="submit" class="auto-complete-result" id="result-0">
+                                <input type="submit" class="auto-complete-result" id="result-1">
+                                <input type="submit" class="auto-complete-result" id="result-2">
+                                <input type="submit" class="auto-complete-result" id="result-3">
+                                <input type="submit" class="auto-complete-result" id="result-4">
+                            </div>
+                            <div class="search-wrapper">
+                                <input
+                                        type="text"
+                                        name="searchBar"
+                                        class="search_bar"
+                                        id="search_bar"
+                                        autocomplete="off"
+                                        placeholder="search for a player"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="pool-row-end" class="pool-row game-end">
-                    <span id="final_driver">{{data.driver2}}</span>
-                </div>
-                <div id="remaining_guesses">
-                    <h3>
-                        <span class="remaining-guesses-text">( Remaining Guesses: </span>
-                        <span class="remaining-guesses-number" id="remaining_guesses_number"></span> )
-                    </h3>
-                </div>
+                    <div id="pool-row-end" class="pool-row game-end">
+                        <span id="final_driver">{{data.driver2}}</span>
+                    </div>
+                    <div id="remaining_guesses">
+                        <h3>
+                            <span class="remaining-guesses-text">( Remaining Guesses: </span>
+                            <span class="remaining-guesses-number" id="remaining_guesses_number"></span> )
+                        </h3>
+                    </div>
+                    <div id="come_back_daily">
+                        <h5>
+                            <br>
+                            <span class="come_back_text">Come back tomorrow after 12:00 am ET for a new daily game.</span>
+                            <br> 
+                            <br>
+                            <span class="come_back_text">Also, check out <a href="/unlimited">unlimited</a> mode to play on-demand and the <a href="/explore">visualize</a> page to explore F1 teammate networks.</span>
+                        </h5>
+                    </div>
                 </div>
             </div>
             {% block new_game %}
             {% endblock %}
-            </div>
+        </div>
     </div>
     {% include 'include/solution_container.html' %}
     {% include 'include/tutorial_container.html' %}
