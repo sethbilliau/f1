@@ -183,6 +183,7 @@ async function buildSolution(nameList) {
     } is ${String(nameList.length - 2)} teammate(s) long.`;
 
     solutionEl.appendChild(titleSpan1);
+    solutionEl.appendChild(document.createElement('br'));
 
     // Add title
     const titleSpan2 = document.createElement('span');
