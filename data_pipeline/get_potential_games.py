@@ -211,10 +211,26 @@ def main():
                     obscureDrivers.add(pair)
         driverSet.add(driver)
 
+        
+    def work_sp(tx, start_, final_):
+        result = tx.run(
+            'MATCH (p1:Driver { fullName: "' + start_ + '" }),'
+            '(p2:Driver { fullName: "' + final_ + '" }),'
+            "path = shortestPath((p1)-[*..15]-(p2))"
+            "RETURN length(path)"
+        )
+        return [record[0] for record in result][0]
+    
+
     pairingsList = []
     for driver1, driver2 in pairingSet:
-        if driver1 != driver2:
-            pairingsList.append({'driver1': driver1, 'driver2': driver2})
+        if driver1 == driver2:
+            continue
+        length_sp = db_session.execute_read(work_sp, driver1, driver2)
+        if length_sp == 1: 
+            continue
+        
+        pairingsList.append({'driver1': driver1, 'driver2': driver2})
 
     pprint(pairingsList)
     print(f"Length: {len(pairingsList)}")
