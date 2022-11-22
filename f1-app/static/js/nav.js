@@ -20,16 +20,6 @@ function showModalSlow() {
     showSolution();
 }
 
-// Show Solution modal container quickly (defined in styles.css)
-// function showModalFast() {
-//     statsModal.style.visibility = 'visible';
-//     statsModal.classList.add('show');
-//     statsModal.classList.add('fast');
-
-//     // Call the appropriate gameplay functions for the solution to the game
-//     showSolution();
-// }
-
 // Hide the solution modal container
 function hideModal() {
     statsModal.style.visibility = 'hidden';

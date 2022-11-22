@@ -157,6 +157,11 @@ async function buttonHandler() {
             // Remove Remaining Guesses Counter
             document.querySelector('#remaining_guesses').remove();
 
+            // show come back text
+            document.querySelector('#come_back_daily').style.visibility = 'visible';
+            document.querySelector('#come_back_daily').classList.add('show');
+
+            // show solution modal container
             showModalSlow();
         } else {
             getRemainingGuesses();

@@ -636,3 +636,10 @@ h1 {
     width: 100vw !important;
   }
 }
+
+#come_back_daily {
+  visibility: hidden;
+  max-width: 38.438rem;
+  width: 100%;
+  text-align: center;
+}
