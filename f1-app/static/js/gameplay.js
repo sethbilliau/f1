@@ -49,6 +49,27 @@ function searchBarNumber() {
     searchWrapper.classList.add(`guess_num_${GUESS_COUNTER + 1}`);
 }
 
+// focus on the input box 
+function inputBoxFocus() { 
+    // Clear input box of text, focus and select it
+    inputBox.value = '';
+    inputBox.focus();
+    inputBox.select();
+}
+
+// Reset search wrapper
+function resetSearchBarWrapper() { 
+    // Clear all button text
+    for (let i = 0; i < 5; i += 1) {
+        const button = searchWrapper.querySelector(`#result-${i}`);
+        button.value = '';
+        button.innerHTML = '';
+    }
+
+    // Clear Search Stats
+    searchStats.innerHTML = '';
+}
+
 // Initialize the game - to be called on load.
 function initializeGame() {
     initializeDrivers();
@@ -86,14 +107,13 @@ async function buttonHandler() {
     const candidateDriver = this.textContent;
 
     // Give input box the correct value
-    // inputBox.value = candidateDriver - TODO decide if the we are checking joke is funny
     inputBox.value = 'wE aRe ChEcKiNg...';
 
     // Increment the guess counter
-    GUESS_COUNTER += 1;
+    GUESS_COUNTER = GUESS_COUNTER + 1;
 
     // Decrement Remaining Guesses
-    REMAINING_GUESSES -= 1;
+    REMAINING_GUESSES = REMAINING_GUESSES - 1;
 
     // Get current Row
     const currentRow = document.getElementById(`pool-row-${GUESS_COUNTER}`);
@@ -133,24 +153,13 @@ async function buttonHandler() {
         searchWrapper.classList.remove(`guess_num_${GUESS_COUNTER}`);
         searchWrapper.classList.add(`guess_num_${GUESS_COUNTER + 1}`);
 
-        // Clear all button text
-        for (let i = 0; i < 5; i += 1) {
-            const button = searchWrapper.querySelector(`#result-${i}`);
-            button.value = '';
-            button.innerHTML = '';
-        }
+        // Reset search bar by clearing button text and search stats
+        resetSearchBarWrapper();
 
-        // Clear Search Stats
-        searchStats.innerHTML = '';
-
-        // Change search bar name and remaining guesses
+        // Update search bar name & remaining guesses, focus on input box
         searchBarName();
         getRemainingGuesses();
-
-        // Clear input box of text, focus and select it
-        inputBox.value = '';
-        inputBox.focus();
-        inputBox.select();
+        inputBoxFocus();
     } else {
         searchWrapper.style.visibility = 'hidden';
 
@@ -243,38 +252,48 @@ function searchForDriversInputBox(e) {
 
 // Reset board 
 function resetBoard() {
+
     // hide come back text
     document.querySelector('#come_back_daily').style.visibility = 'hidden';
 
-    // show Remaining Guesses Counter
+    // Show Remaining Guesses Counter
     document.querySelector('#remaining_guesses').style.visibility = 'visible';
 
-    // Reset guess number
-    searchWrapper.classList.remove(`guess_num_${GUESS_COUNTER + 1}`);
-    searchWrapper.classList.add(`guess_num_1`);
+    // Reset guess number and show search wrapper
+    for (let i = 1; i < 7; i = i + 1) {
+        // Remove guess number tags 
+        searchWrapper.classList.remove(`guess_num_${i}`);
 
-    for (let i = 2; i < 7; i = i + 1) {
-        // Get current Row
+        // Remove row tags
         const currentRow = document.getElementById(`pool-row-${i}`);
         currentRow.setAttribute('data-hidden-pool-row', "");
         currentRow.removeAttribute('data-active-pool-row');
         currentRow.removeAttribute('data-guess-result');
+        currentRow.textContent = "";
     }
 
+    // Set the search wrapper as active
+    searchWrapper.style.visibility = 'visible';
+    searchWrapper.classList.remove(`guess_num_${GUESS_COUNTER + 1}`);
+    searchWrapper.classList.add(`guess_num_1`);
+
     // Make the first row active
-    // Get current Row
     const firstRow = document.getElementById(`pool-row-1`);
-    firstRow.removeAttribute('data-active-pool-row');
-    firstRow.removeAttribute('data-guess-result');
+    firstRow.removeAttribute("data-hidden-pool-row");
     firstRow.setAttribute('data-active-pool-row', "");
+
+    // Reset search bar by clearing button text and search stats
+    resetSearchBarWrapper();
 
     // Reset guess counter and current driver
     GUESS_COUNTER = 0;
     CURRENT_DRIVER = STARTING_DRIVER; 
     REMAINING_GUESSES = MAX_GUESSES; 
 
-    // Reset remaining guesses
+    // Change search bar name and remaining guesses
+    searchBarName();
     getRemainingGuesses();
+    inputBoxFocus();
 }
 
 inputBox.onkeyup = searchForDriversInputBox;
@@ -289,6 +308,7 @@ button2.onclick = buttonHandler;
 button3.onclick = buttonHandler;
 button4.onclick = buttonHandler;
 
+// Bind handler if reset button exists
 if (resetButton){
     resetButton.onclick = resetBoard;
 }
