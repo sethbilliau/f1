@@ -657,3 +657,8 @@ h1 {
   border: 2px solid black;
   z-index: 10;
 }
+
+a.clickable-links {
+  color: #004225;
+  text-decoration: underline;
+}
