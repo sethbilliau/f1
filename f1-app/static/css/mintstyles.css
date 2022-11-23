@@ -4618,12 +4618,12 @@
  }
  
  .navbar-dark .navbar-toggler {
-   color: rgba(255, 255, 255, 0.6);
-   border-color: rgba(255, 255, 255, 0.1);
+   color: #fff;
+   border-color: #fff;
  }
  
  .navbar-dark .navbar-text {
-   color: rgba(255, 255, 255, 0.6);
+   color: #fff;
  }
  
  .navbar-dark .navbar-text a {
@@ -4655,6 +4655,12 @@
    margin-right: 0;
    margin-left: 0;
  }
+
+ .navbar-dark .navbar-toggler-icon {
+    background-color: #fff;
+    -webkit-mask-image: url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg");
+    mask-image: url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg");
+  } 
  
  .card > .list-group:first-child .list-group-item:first-child {
    border-top-left-radius: 0.4rem;
