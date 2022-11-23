@@ -113,7 +113,7 @@ async function buttonHandler() {
     allDrivers.splice(allDrivers.indexOf(candidateDriver), 1);
 
     // Give input box the correct value
-    inputBox.value = 'wE aRe ChEcKiNg...';
+    inputBox.value = "Lights out and away we go!";
 
     // Increment the guess counter
     GUESS_COUNTER = GUESS_COUNTER + 1;
