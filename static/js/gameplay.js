@@ -12,6 +12,7 @@ let REMAINING_GUESSES = MAX_GUESSES - GUESS_COUNTER;
 let STARTING_DRIVER;
 let CURRENT_DRIVER;
 let FINAL_DRIVER;
+let allDriversGame;
 
 // Get certain elements and define them as constants
 const searchWrapper = document.querySelector('.search-container');
@@ -36,6 +37,10 @@ function getRemainingGuesses() {
 function initializeDrivers() {
     STARTING_DRIVER = document.querySelector('#prompt_player_1').textContent;
     FINAL_DRIVER = document.querySelector('#prompt_player_2').textContent;
+
+    // Remove starting and ending drivers from consideration 
+    allDrivers.splice(allDrivers.indexOf(STARTING_DRIVER), 1); allDrivers.splice(allDrivers.indexOf(FINAL_DRIVER), 1);
+    allDriversGame = allDrivers.slice();
     CURRENT_DRIVER = STARTING_DRIVER;
 }
 
@@ -105,9 +110,10 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver) {
 async function buttonHandler() {
     // get candidate driver
     const candidateDriver = this.textContent;
+    allDrivers.splice(allDrivers.indexOf(candidateDriver), 1);
 
     // Give input box the correct value
-    inputBox.value = 'wE aRe ChEcKiNg...';
+    inputBox.value = "Lights out and away we go!";
 
     // Increment the guess counter
     GUESS_COUNTER = GUESS_COUNTER + 1;
@@ -163,7 +169,7 @@ async function buttonHandler() {
     } else {
         searchWrapper.style.visibility = 'hidden';
 
-        if (guessCorrectness === 'winner') {
+        if (guessCorrectness === 'winner' || REMAINING_GUESSES === 0) {
             // Hide Remaining Guesses Counter
             document.querySelector('#remaining_guesses').style.visibility = 'hidden';
 
@@ -171,7 +177,7 @@ async function buttonHandler() {
             document.querySelector('#come_back_daily').style.visibility = 'visible';
 
             // show solution modal container
-            showModalSlow();
+            showModalSlow(guessCorrectness);
         } else {
             getRemainingGuesses();
         }
@@ -185,7 +191,14 @@ async function getSolution(STARTING_DRIVER_, FINAL_DRIVER_) {
         .then((responseJson) => responseJson);
 }
 
-async function buildSolution(nameList) {
+async function buildSolution(nameList, winner) {
+    if (winner === 'winner'){
+        document.querySelector("#winning_title").textContent = 'You won!'
+    } else { 
+        document.querySelector("#winning_title").textContent = 'Solution'
+    }
+    
+
     const titleSpan1 = document.createElement('span');
     titleSpan1.classList.add('italic', 'solution-copy');
     titleSpan1.textContent = `The shortest teammate path between ${STARTING_DRIVER} and ${FINAL_DRIVER
@@ -233,17 +246,20 @@ async function buildSolution(nameList) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function showSolution() {
+async function showSolution(winner="winner") {
     // Unhide the solution modal container
     statsModal.classList.add('show');
 
     // Add winner class to the solution div
-    solutionEl.classList.add('winner');
+    if (winner === 'winner') { 
+        solutionEl.classList.add('winner');
+    }
+    
 
     // Get current drivers' teammates
     const solutionNames = await getSolution(STARTING_DRIVER, FINAL_DRIVER);
 
-    await buildSolution(solutionNames);
+    await buildSolution(solutionNames, winner);
 }
 
 // Search for drivers on each key in the input box
@@ -295,6 +311,9 @@ function resetBoard() {
     searchBarName();
     getRemainingGuesses();
     inputBoxFocus();
+
+    // Reset allDrivers list 
+    allDrivers = allDriversGame;
 }
 
 inputBox.onkeyup = searchForDriversInputBox;

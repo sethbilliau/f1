@@ -67,7 +67,7 @@ nav .navbar-brand .green {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid rgb(68, 68, 68);
+  border: 1px solid #00A19C;
   max-width: 38.438rem;
   width: 100%;
   height: 2.188rem;
@@ -84,7 +84,6 @@ nav .navbar-brand .green {
 /* Results of a guess */
 [data-guess-result="incorrect"] {
   color: rgb(58, 58, 60);
-  background-color: rgb(241, 16, 16);
   text-decoration: line-through;
 }
 
@@ -132,7 +131,7 @@ nav .navbar-brand .green {
 
 .game-prompt-player {
   color: #00A19C;
-  font-weight: 800;
+  font-weight: bold;
 }
 
 /*Search Container */
@@ -141,7 +140,7 @@ nav .navbar-brand .green {
   flex-direction: column-reverse;
   align-items: center;
   width: 100%;
-  border: 2px solid #004225;
+  border: 2px solid #00A19C;
   z-index: 10;
 }
 
@@ -462,7 +461,6 @@ h1 {
 .tutorial-pool-row.incorrect {
   text-decoration: line-through;
   color: rgb(58, 58, 60);
-  background-color: rgb(241, 16, 16);
 }
 
 .tutorial-pool-row.correct {
@@ -485,7 +483,7 @@ h1 {
 }
 
 .tutorial-incorrect {
-  color: rgb(241, 16, 16);
+  color: "#ff363b";
 }
 
 #support_modal_container {
@@ -645,4 +643,17 @@ h1 {
   max-width: 38.438rem;
   width: 100%;
   text-align: center;
+}
+
+#remaining_guesses_number { 
+  color: #00A19C;
+}
+
+.search-results-container-viz {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  width: 100%;
+  border: 2px solid black;
+  z-index: 10;
 }
