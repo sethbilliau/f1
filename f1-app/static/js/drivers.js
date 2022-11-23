@@ -7,7 +7,7 @@ while searching for drivers in the autocomplete section of the game.
 */
 
 // eslint-disable-next-line no-unused-vars
-const allDrivers = [
+let allDrivers = [
     'Carlo Abate',
     'George Abecassis',
     'Kenny Acheson',
