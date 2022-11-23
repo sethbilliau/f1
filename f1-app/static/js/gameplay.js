@@ -169,7 +169,7 @@ async function buttonHandler() {
     } else {
         searchWrapper.style.visibility = 'hidden';
 
-        if (guessCorrectness === 'winner') {
+        if (guessCorrectness === 'winner' || REMAINING_GUESSES === 0) {
             // Hide Remaining Guesses Counter
             document.querySelector('#remaining_guesses').style.visibility = 'hidden';
 
@@ -177,7 +177,7 @@ async function buttonHandler() {
             document.querySelector('#come_back_daily').style.visibility = 'visible';
 
             // show solution modal container
-            showModalSlow();
+            showModalSlow(guessCorrectness);
         } else {
             getRemainingGuesses();
         }
@@ -191,7 +191,14 @@ async function getSolution(STARTING_DRIVER_, FINAL_DRIVER_) {
         .then((responseJson) => responseJson);
 }
 
-async function buildSolution(nameList) {
+async function buildSolution(nameList, winner) {
+    if (winner === 'winner'){
+        document.querySelector("#winning_title").textContent = 'You won!'
+    } else { 
+        document.querySelector("#winning_title").textContent = 'Solution'
+    }
+    
+
     const titleSpan1 = document.createElement('span');
     titleSpan1.classList.add('italic', 'solution-copy');
     titleSpan1.textContent = `The shortest teammate path between ${STARTING_DRIVER} and ${FINAL_DRIVER
@@ -239,17 +246,20 @@ async function buildSolution(nameList) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function showSolution() {
+async function showSolution(winner="winner") {
     // Unhide the solution modal container
     statsModal.classList.add('show');
 
     // Add winner class to the solution div
-    solutionEl.classList.add('winner');
+    if (winner === 'winner') { 
+        solutionEl.classList.add('winner');
+    }
+    
 
     // Get current drivers' teammates
     const solutionNames = await getSolution(STARTING_DRIVER, FINAL_DRIVER);
 
-    await buildSolution(solutionNames);
+    await buildSolution(solutionNames, winner);
 }
 
 // Search for drivers on each key in the input box

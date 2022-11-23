@@ -12,12 +12,12 @@ const modalX = document.querySelector('#close_button');
 const showStatsNavEl = document.querySelector('#show_soln');
 
 // Show Solution modal container slowly (defined in styles.css)
-function showModalSlow() {
+function showModalSlow(winner="winner") {
     statsModal.style.visibility = 'visible';
     statsModal.classList.add('show');
 
     // Call the appropriate gameplay functions for the solution to the game
-    showSolution();
+    showSolution(winner);
 }
 
 // Hide the solution modal container
