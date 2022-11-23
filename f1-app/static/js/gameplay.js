@@ -12,6 +12,7 @@ let REMAINING_GUESSES = MAX_GUESSES - GUESS_COUNTER;
 let STARTING_DRIVER;
 let CURRENT_DRIVER;
 let FINAL_DRIVER;
+let allDriversGame;
 
 // Get certain elements and define them as constants
 const searchWrapper = document.querySelector('.search-container');
@@ -36,6 +37,10 @@ function getRemainingGuesses() {
 function initializeDrivers() {
     STARTING_DRIVER = document.querySelector('#prompt_player_1').textContent;
     FINAL_DRIVER = document.querySelector('#prompt_player_2').textContent;
+
+    // Remove starting and ending drivers from consideration 
+    allDrivers.splice(allDrivers.indexOf(STARTING_DRIVER), 1); allDrivers.splice(allDrivers.indexOf(FINAL_DRIVER), 1);
+    allDriversGame = allDrivers.slice();
     CURRENT_DRIVER = STARTING_DRIVER;
 }
 
@@ -105,6 +110,7 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver) {
 async function buttonHandler() {
     // get candidate driver
     const candidateDriver = this.textContent;
+    allDrivers.splice(allDrivers.indexOf(candidateDriver), 1);
 
     // Give input box the correct value
     inputBox.value = 'wE aRe ChEcKiNg...';
@@ -295,6 +301,9 @@ function resetBoard() {
     searchBarName();
     getRemainingGuesses();
     inputBoxFocus();
+
+    // Reset allDrivers list 
+    allDrivers = allDriversGame;
 }
 
 inputBox.onkeyup = searchForDriversInputBox;
