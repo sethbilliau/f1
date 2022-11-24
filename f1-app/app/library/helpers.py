@@ -23,15 +23,15 @@ def get_random_starting_ending_drivers(seed: Optional[int] = None):
     return {'driver1': row['driver1'], 'driver2': row['driver2']}
 
 
-def get_starting_ending_drivers_from_s3(region, id, secretkey, bucket, key):
+def get_starting_ending_drivers_from_s3(region, key_id, secretkey, bucket, key):
     """Get starting/ending driver pairing from S3"""
-    s3 = boto3.resource(
+    s3_resource = boto3.resource(
         service_name='s3',
         region_name=region,
-        aws_access_key_id=id,
+        aws_access_key_id=key_id,
         aws_secret_access_key=secretkey
     )
-    obj = s3.Bucket(bucket).Object(key).get()
+    obj = s3_resource.Bucket(bucket).Object(key).get()
     file_content = obj['Body'].read().decode('utf-8')
     json_content = json.loads(file_content)
     return {
