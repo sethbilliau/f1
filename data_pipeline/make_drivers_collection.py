@@ -11,7 +11,7 @@ import json
 from pyergast_source.pyergast import pyergast as ergast
 
 # import functions from utils
-from utils import get_mongo_db
+from helpers import get_mongo_db
 
 
 def main():

@@ -6,7 +6,7 @@ Created on Thu Oct 20 11:23:11 2022
 @author: sethbilliau
 """
 # import functions from utils
-from utils import (
+from helpers import (
     get_mongo_db, get_neo4j_dbms, execute_neo_commands, switcher
 )
 

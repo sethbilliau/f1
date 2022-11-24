@@ -10,7 +10,7 @@ Created on Thu Oct 20 11:23:11 2022
 from pyergast_source.pyergast import pyergast as ergast
 
 # import functions from utils
-from utils import get_mongo_db
+from helpers import get_mongo_db
 
 
 def update_teammate_features(driver_id, new_teammate_features, mongo_db):
