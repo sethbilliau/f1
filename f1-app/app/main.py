@@ -1,4 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 20 11:23:11 2022
+
+@author: sethbilliau
+"""
 from contextlib import asynccontextmanager
 import logging
 import os
@@ -51,7 +57,7 @@ username = os.getenv("NEO4J_USER", "movies")
 password = os.getenv("NEO4J_PW", "movies")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "movies")
-port = os.getenv("PORT", 8080)
+port = os.getenv("PORT", "8080")
 
 AWS_REGION_NAME = os.getenv("AWS_REGION_NAME", "NONE")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "NONE")
@@ -60,16 +66,19 @@ AWS_BUCKET = os.getenv("AWS_BUCKET", "NONE")
 AWS_KEY = os.getenv("AWS_KEY", "NONE")
 
 # Access the data base driver - async
-driver = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
+DRIVER = AsyncGraphDatabase.driver(url, auth=basic_auth(username, password))
 
 
 @asynccontextmanager
 async def get_db():
+    ''''
+        Access the neo4j data base
+    '''
     if neo4j_version >= "4":
-        async with driver.session(database=database) as session_:
+        async with DRIVER.session(database=database) as session_:
             yield session_
     else:
-        async with driver.session() as session_:
+        async with DRIVER.session() as session_:
             yield session_
 
 
@@ -79,6 +88,9 @@ app.include_router(explore.router)
 
 @app.get("/")
 async def root(request: Request):
+    ''''
+        Route to the main page '/'
+    '''
     data = get_starting_ending_drivers_from_s3(
         AWS_REGION_NAME,
         AWS_ACCESS_KEY_ID,
@@ -93,6 +105,9 @@ async def root(request: Request):
 
 @app.get("/unlimited")
 async def unlimited(request: Request):
+    ''''
+        Route to the unlimited page '/unlimited'
+    '''
     data = get_random_starting_ending_drivers()
     return templates.TemplateResponse(
         "unlimited.html", {"request": request, "data": data}
@@ -101,6 +116,9 @@ async def unlimited(request: Request):
 
 @app.get("/search")
 async def get_search(q: Optional[str] = None):
+    '''
+        use the search GET to query the DB
+    '''
     async def work(tx, q_):
         result = await tx.run(
             "MATCH (a:Driver {fullName: '" + q_ + "'} )"
@@ -118,6 +136,7 @@ async def get_search(q: Optional[str] = None):
 
 @app.get("/solve")
 async def solve(start: Optional[str] = None, final: Optional[str] = None):
+    '''Use the solve GET to query the DB'''
     async def work(tx, start_, final_):
         result = await tx.run(
             "MATCH (p1:Driver { fullName: '" + start_ + "' }),"
@@ -142,6 +161,7 @@ async def get_graph(
         driver3: Optional[str] = None,
         driver4: Optional[str] = None,
         driver5: Optional[str] = None):
+    '''Use the graph GET to create a graph from the db'''
     async def work(tx, driver_):
         result = await tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
@@ -151,40 +171,41 @@ async def get_graph(
         return [record_ async for record_ in result]
 
     async with get_db() as db:
-        driverList = [driver1, driver2, driver3, driver4, driver5]
-        nodesSet = set()
+        driver_lst = [driver1, driver2, driver3, driver4, driver5]
+        nodes_set = set()
         nodes = []
         names = []
-        relsSet = set()
-        for driver in driverList:
+        rels_set = set()
+        for driver in driver_lst:
             if driver:
                 results = await db.execute_read(work, driver)
-                for starting_node, _, ending_node in results:
-                    if starting_node["fullName"] not in nodesSet:
-                        names, nodes, nodesSet = add_node(starting_node, names,
-                                                          nodes, nodesSet,
-                                                          driverList)
+                for start_node, _, ending_node in results:
+                    if start_node["fullName"] not in nodes_set:
+                        names, nodes, nodes_set = add_node(start_node, names,
+                                                           nodes, nodes_set,
+                                                           driver_lst)
 
-                    if ending_node["fullName"] not in nodesSet:
-                        names, nodes, nodesSet = add_node(ending_node, names,
-                                                          nodes, nodesSet,
-                                                          driverList)
+                    if ending_node["fullName"] not in nodes_set:
+                        names, nodes, nodes_set = add_node(ending_node, names,
+                                                           nodes, nodes_set,
+                                                           driver_lst)
 
-                    relsSet.add(frozenset(
-                            [namesListFull.index(starting_node["fullName"]),
+                    rels_set.add(frozenset(
+                            [namesListFull.index(start_node["fullName"]),
                              namesListFull.index(ending_node['fullName'])]
                         ))
 
         rels = [{"from": min(list(item)),
                  "to": max(list(item)),
                  "id": str(min(list(item))) +
-                str(max(list(item)))} for item in list(relsSet)]
+                str(max(list(item)))} for item in list(rels_set)]
         return {"nodes": nodes, "links": rels}
 
 
 @app.exception_handler(StarletteHTTPException)
 async def my_custom_exception_handler(request: Request,
                                       exc: StarletteHTTPException):
+    '''Handle HTTPExceptions here'''
     # Handle HTTPExceptions here
     return apology(request, exc)
 

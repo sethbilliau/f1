@@ -9,63 +9,66 @@ Created on Thu Oct 20 11:23:11 2022
 # Import libraries
 import json
 from datetime import date
-from pyergast_source.pyergast import pyergast as ergast
 import time
+from pyergast_source.pyergast import pyergast as ergast
+
 
 # import functions from utils
 from utils import getMongoDB
 
 
 def main():
-
+    '''
+        Main function to execute upon script call
+    '''
     # Get Mongo connection
-    db = getMongoDB()
+    mongo_db = getMongoDB()
 
     # for each year since 1950,
-    seasonCollection = []
+    season_collection = []
     for year in range(1950, date.today().year + 1, 1):
 
         # Initialize a season document
-        seasonDocument = {}
+        season_doc = {}
 
         # Get the season's year
-        seasonDocument['year'] = year
+        season_doc['year'] = year
 
         # Get df of the season schedule in the given year from pyergast
         while True:
             try:
-                dfYear = ergast.get_schedule(year)
+                df_year = ergast.get_schedule(year)
             except Exception:
                 time.sleep(0.5)
             else:
                 break
 
         # Get number of races in season
-        seasonDocument['numRaces'] = dfYear.shape[0]
+        season_doc['numRaces'] = df_year.shape[0]
 
         # initialize list of races
-        seasonDocument['races'] = []
-        for _, race in dfYear.iterrows():
+        season_doc['races'] = []
+        for _, race in df_year.iterrows():
 
             # convert pandas series to json while dropping the season
-            raceDict = {}
-            raceDict = json.loads(json.dumps(race.drop('season').to_dict()))
+            race_dict = {}
+            race_dict = json.loads(json.dumps(race.drop('season').to_dict()))
 
             # Add races list to dictionary
-            seasonDocument['races'].append(raceDict)
+            season_doc['races'].append(race_dict)
 
         # Add season document to the collection
-        seasonCollection.append(seasonDocument)
+        season_collection.append(season_doc)
 
     # Get the seasons collection and insert many
-    dbSeasons = db.get_collection('seasons')
-    inserted = dbSeasons.insert_many(seasonCollection)
+    db_seasons = mongo_db.get_collection('seasons')
+    inserted = db_seasons.insert_many(season_collection)
 
     # Print a count of documents inserted.
     print(str(len(inserted.inserted_ids)) + " documents inserted")
 
     # Make the driverId a unique index in the data set
-    dbSeasons.create_index("year", unique=True)
+    db_seasons.create_index("year", unique=True)
 
     return
 

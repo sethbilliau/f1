@@ -10,55 +10,65 @@ Created on Thu Oct 20 11:23:11 2022
 from pyergast_source.pyergast import pyergast as ergast
 
 # import functions from utils
-from utils import getMongoDB
+from utils import get_mongo_db
 
 
-def update_teammateFeatures(driverID, newTeammateFeatures, db):
-    db.update_one(
-        {'driverID': driverID},
-        {'$push': {'teammateFeatures': newTeammateFeatures}},
+def update_teammate_features(driver_id, new_teammate_features, mongo_db):
+    '''
+        update the teammate features with driver_id
+        and give it new_teammate_features
+    '''
+    mongo_db.update_one(
+        {'driverID': driver_id},
+        {'$push': {'teammateFeatures': new_teammate_features}},
         upsert=True
     )
 
 
-def update_teammateSet(driverID, newTeammate, db):
-    db.update_one(
-        {'driverID': driverID},
-        {'$push': {'teammateSet': newTeammate}},
+def update_teammate_set(driver_id, new_teammate, mongo_db):
+    '''
+        update the teammate set with driver_id and give it new_teammate
+    '''
+    mongo_db.update_one(
+        {'driverID': driver_id},
+        {'$push': {'teammateSet': new_teammate}},
         upsert=True
     )
 
 
 def main():
+    '''
+        Main function to execute upon script call
+    '''
     # Get connected to the Mongo DB and connect to the collections
-    db = getMongoDB()
-    dbSeasons = db.get_collection('seasons')
-    dbDrivers = db.get_collection('drivers')
+    mongo_db = get_mongo_db()
+    db_seasons = mongo_db.get_collection('seasons')
+    db_drivers = mongo_db.get_collection('drivers')
 
     # Initialize an empty set of teammates for each driver in the drivers df
-    dbDrivers.update_many({}, {"$set": {"teammateSet": []}})
-    dbDrivers.update_many({}, {"$set": {"teammateFeatures": []}})
+    db_drivers.update_many({}, {"$set": {"teammateSet": []}})
+    db_drivers.update_many({}, {"$set": {"teammateFeatures": []}})
 
     # Get a list of all seasons
-    year_races_list = list(dbSeasons.find({}, {'year': 1, 'numRaces': 1}))
+    year_races_list = list(db_seasons.find({}, {'year': 1, 'numRaces': 1}))
 
     # iterate through the list of seasons
     for season_rec in year_races_list:
         year = season_rec['year']
-        numRaces = season_rec['numRaces']
+        num_races = season_rec['numRaces']
 
-        print(f'Collecting results for {year} with {numRaces} races')
+        print(f'Collecting results for {year} with {num_races} races')
 
-        for raceIdx in range(0, numRaces, 1):
-            print(f"DEBUG: Year {year} race {raceIdx + 1}")
+        for race_idx in range(0, num_races, 1):
+            print(f"DEBUG: Year {year} race {race_idx + 1}")
             # Get results for the race in question
-            raceResults = ergast.get_race_result(year=year, race=raceIdx + 1)
+            race_results = ergast.get_race_result(year=year, race=race_idx + 1)
 
             # Iterate through each constructor
-            for constructor in raceResults['constructorID'].unique():
+            for constructor in race_results['constructorID'].unique():
 
-                constructordf = raceResults.loc[
-                    raceResults['constructorID'] == constructor
+                constructordf = race_results.loc[
+                    race_results['constructorID'] == constructor
                 ]
 
                 print("DEBUG: Adding Teammates for the " +
@@ -66,31 +76,39 @@ def main():
                       + constructor + ")")
 
                 # Get all the teammates in a lst of dicts for teammate features
-                teammateEntry = [{
-                                  'teammateID': teammateRow['driverID'],
-                                  'team': constructor,
-                                  'year': year,
-                                  'race': raceIdx + 1
-                                 } for _, teammateRow
-                                 in constructordf.iterrows()]
+                teammate_entry = [{
+                                    'teammateID': teammateRow['driverID'],
+                                    'team': constructor,
+                                    'year': year,
+                                    'race': race_idx + 1
+                                  } for _, teammateRow
+                                  in constructordf.iterrows()]
 
                 # Iterate through each driver for the constructor
-                for driverIdx, driver in constructordf.iterrows():
+                for _, driver in constructordf.iterrows():
                     # Iterate through each teammate
-                    for teammateRecord in teammateEntry:
+                    for teammate_record in teammate_entry:
                         # If the teammate is not the driver themself
-                        if teammateRecord['teammateID'] != driver['driverID']:
+                        if teammate_record['teammateID'] == driver['driverID']:
+                            continue
+                        # Get the driver document
+                        driver_record = db_drivers.find_one(
+                                {'driverID': driver['driverID']}
+                            )
 
-                            # Get the driver document
-                            driverRecord = dbDrivers.find_one(
-                                    {'driverID': driver['driverID']}
+                        # If this is a new teammate, then
+                        # add them to the teammate set and record
+                        if teammate_record['teammateID'] not in driver_record['teammateSet']:
+                            update_teammate_set(
+                                    driver['driverID'],
+                                    teammate_record['teammateID'],
+                                    db_drivers
                                 )
-
-                            # If this is a new teammate, then
-                            # add them to the teammate set and record
-                            if teammateRecord['teammateID'] not in driverRecord['teammateSet']:
-                                update_teammateSet(driver['driverID'], teammateRecord['teammateID'])
-                                update_teammateFeatures(driver['driverID'], teammateRecord)
+                            update_teammate_features(
+                                    driver['driverID'],
+                                    teammate_record,
+                                    db_drivers
+                                )
 
     return
 
