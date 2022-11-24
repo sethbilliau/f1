@@ -181,9 +181,7 @@ LIMIT = 3
 
 
 def main():
-    '''
-        Main function to execute upon script call
-    '''
+    '''Main function to execute upon script call'''
     def work(tx, driver_):
         result = tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
@@ -240,7 +238,6 @@ def main():
     pairings_df = pd.DataFrame(pairings_list).sample(frac=1)
     pairings_df = pairings_df.reset_index(drop=True)
     pairings_df.to_csv(f'../f1-app/app/data/pairings_limit{str(LIMIT)}.csv')
-    return
 
 
 if __name__ == '__main__':
