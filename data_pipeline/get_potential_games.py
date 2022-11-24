@@ -12,7 +12,7 @@ import pandas as pd
 from dotenv import dotenv_values
 
 # import functions from utils
-from utils import get_neo4j_dbms
+from helpers import get_neo4j_dbms
 
 currentDrivers = [
     'Alexander Albon',

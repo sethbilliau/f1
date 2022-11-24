@@ -14,7 +14,7 @@ from pyergast_source.pyergast import pyergast as ergast
 
 
 # import functions from utils
-from utils import getMongoDB
+from helpers import get_mongo_db
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
         Main function to execute upon script call
     '''
     # Get Mongo connection
-    mongo_db = getMongoDB()
+    mongo_db = get_mongo_db()
 
     # for each year since 1950,
     season_collection = []
