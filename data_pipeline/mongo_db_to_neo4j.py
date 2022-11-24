@@ -12,9 +12,7 @@ from helpers import (
 
 
 def main():
-    '''
-        Main function to execute upon script call
-    '''
+    '''Main function to execute upon script call'''
     # Get connected to the Mongo DB and connect to the collections
     mongo_db = get_mongo_db()
     db_drivers = mongo_db.get_collection('drivers')

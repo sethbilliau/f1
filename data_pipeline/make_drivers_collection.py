@@ -15,9 +15,7 @@ from helpers import get_mongo_db
 
 
 def main():
-    '''
-        Main function to execute upon script call
-    '''
+    '''Main function to execute upon script call'''
     mongo_db = get_mongo_db()
 
     # Get pandas df of all drivers from ergast, rename driverId to driverID
@@ -46,8 +44,6 @@ def main():
 
     # Make the driverId a unique index in the data set
     db_drivers.create_index("driverID", unique=True)
-
-    return
 
 
 if __name__ == '__main__':

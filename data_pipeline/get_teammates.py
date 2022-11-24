@@ -110,8 +110,6 @@ def main():
                                     db_drivers
                                 )
 
-    return
-
 
 if __name__ == '__main__':
     main()

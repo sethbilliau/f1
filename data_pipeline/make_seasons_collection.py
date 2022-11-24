@@ -70,8 +70,6 @@ def main():
     # Make the driverId a unique index in the data set
     db_seasons.create_index("year", unique=True)
 
-    return
-
 
 if __name__ == '__main__':
     main()
