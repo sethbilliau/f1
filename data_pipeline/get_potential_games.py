@@ -181,6 +181,9 @@ LIMIT = 3
 
 
 def main():
+    '''
+        Main function to execute upon script call
+    '''
     def work(tx, driver_):
         result = tx.run(
             "MATCH (a:Driver {fullName: '" + driver_ +
@@ -193,25 +196,24 @@ def main():
 
     db_name = config['NEO4J_DATABASE']
     # Get Neo4j connection
-    db = getneo4jDBMS()
-    db_session = db.session(database=db_name)
+    neo4j_db = getneo4jDBMS()
+    db_session = neo4j_db.session(database=db_name)
 
-    pairingSet = set()
-    driverSet = set()
-    obscureDrivers = set()
+    pairing_set = set()
+    driver_set = set()
+    obscure_drivers = set()
 
     for driver in currentDrivers:
         paired_drivers = db_session.execute_read(work, driver)
         for pair in paired_drivers:
             # Don't add duplicates
-            if pair not in driverSet:
+            if pair not in driver_set:
                 if pair in otherDrivers or pair in currentDrivers or pair in worldChamps:
-                    pairingSet.add((driver, pair))
+                    pairing_set.add((driver, pair))
                 else:
-                    obscureDrivers.add(pair)
-        driverSet.add(driver)
+                    obscure_drivers.add(pair)
+        driver_set.add(driver)
 
-        
     def work_sp(tx, start_, final_):
         result = tx.run(
             'MATCH (p1:Driver { fullName: "' + start_ + '" }),'
@@ -220,24 +222,24 @@ def main():
             "RETURN length(path)"
         )
         return [record[0] for record in result][0]
-    
 
-    pairingsList = []
-    for driver1, driver2 in pairingSet:
+    pairings_list = []
+    for driver1, driver2 in pairing_set:
         if driver1 == driver2:
             continue
         length_sp = db_session.execute_read(work_sp, driver1, driver2)
-        if length_sp == 1: 
+        if length_sp == 1:
             continue
-        
-        pairingsList.append({'driver1': driver1, 'driver2': driver2})
 
-    pprint(pairingsList)
-    print(f"Length: {len(pairingsList)}")
-    print(obscureDrivers)
+        pairings_list.append({'driver1': driver1, 'driver2': driver2})
 
-    pairingsDF = pd.DataFrame(pairingsList).sample(frac=1).reset_index(drop=True)
-    pairingsDF.to_csv(f'../f1-app/app/data/pairings_limit{str(LIMIT)}.csv')
+    pprint(pairings_list)
+    print(f"Length: {len(pairings_list)}")
+    print(obscure_drivers)
+
+    pairings_df = pd.DataFrame(pairings_list).sample(frac=1)
+    pairings_df = pairings_df.reset_index(drop=True)
+    pairings_df.to_csv(f'../f1-app/app/data/pairings_limit{str(LIMIT)}.csv')
     return
 
 
