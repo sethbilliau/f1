@@ -11,14 +11,14 @@ import json
 from pyergast_source.pyergast import pyergast as ergast
 
 # import functions from utils
-from utils import getMongoDB
+from utils import get_mongo_db
 
 
 def main():
     '''
         Main function to execute upon script call
     '''
-    mongo_db = getMongoDB()
+    mongo_db = get_mongo_db()
 
     # Get pandas df of all drivers from ergast, rename driverId to driverID
     all_drivers = ergast.get_drivers().rename(columns={"driverId": "driverID"})

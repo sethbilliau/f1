@@ -17,8 +17,8 @@ from neo4j import (
 )
 
 
-def getMongoDB():
-
+def get_mongo_db():
+    """Get the mongo db"""
     # Get values from .env
     config = dotenv_values('.env')
 
@@ -31,13 +31,13 @@ def getMongoDB():
     client = MongoClient(f'mongodb+srv://{db_user}:{db_pw}@{db_uri}')
 
     # Get the data base name
-    db = client.get_database(db_name)
+    mongo_db = client.get_database(db_name)
 
-    return db
+    return mongo_db
 
 
-def getneo4jDBMS():
-
+def get_neo4j_dbms():
+    """Get Neo4j DBMS"""
     # Get values from .env
     config = dotenv_values('.env')
 
@@ -46,52 +46,53 @@ def getneo4jDBMS():
     db_pw = config['NEO4J_PW']
 
     # Connect to the DBMS DRIVER with the connection string
-    graphDB_Driver = GraphDatabase.driver(db_uri,
-                                          auth=basic_auth(db_user, db_pw))
+    graph_db_driver = GraphDatabase.driver(db_uri,
+                                           auth=basic_auth(db_user, db_pw))
 
-    return graphDB_Driver
+    return graph_db_driver
 
 
-def execute_neo_commands(execution_commands, graphDB_driver):
+def execute_neo_commands(execution_commands, graph_db_driver):
+    """Execute command in neo4j dbms"""
     # Get values from .env
     config = dotenv_values('.env')
 
     db_name = config['NEO4J_DATABASE']
 
-    session = graphDB_driver.session(database=db_name)
+    session = graph_db_driver.session(database=db_name)
     for i in execution_commands:
         session.run(i)
 
     return
 
+
 def switcher(argument):
     '''
     Remove special characters from a series of names
-    
     :param series: Pandas series of player names
     :return: List of unique names
     '''
     _switcher = {
-        'René Arnoux': 'Rene Arnoux', 
+        'René Arnoux': 'Rene Arnoux',
         'Élie Bayol': 'Elie Bayol',
         'Éric Bernard': 'Eric Bernard',
         'Sébastien Bourdais': 'Sebastien Bourdais',
         'Sébastien Buemi': 'Sebastien Buemi',
         'Mário de Araújo Cabral': 'Mario de Araujo Cabral',
         'Adrián Campos': 'Adrian Campos',
-        'François Cevert':'Francois Cevert',
+        'François Cevert': 'Francois Cevert',
         'Eugène Chaboud': 'Eugene Chaboud',
         'Érik Comas': 'Erik Comas',
         "Jérôme d'Ambrosio": "Jerome d'Ambrosio",
-        'Jean-Denis Délétraz' : 'Jean-Denis Deletraz',
-        'José Dolhem':'Jose Dolhem',
+        'Jean-Denis Délétraz': 'Jean-Denis Deletraz',
+        'José Dolhem': 'Jose Dolhem',
         'Tomáš Enge': 'Tomas Enge',
         'Nasif Estéfano': 'Nasif Estefano',
         'Philippe Étancelin': 'Philippe Etancelin',
         'Paul Frère': 'Paul Frere',
         'Oscar Gálvez': 'Oscar Galvez',
         'Marc Gené': 'Marc Gene',
-        'José Froilán González':'Jose Froilan Gonzalez',
+        'José Froilán González': 'Jose Froilan Gonzalez',
         'Óscar González': 'Oscar Gonzalez',
         'André Guelfi': 'Andre Guelfi',
         'Miguel Ángel Guerra': "Miguel Angel Guerra",
@@ -106,7 +107,7 @@ def switcher(argument):
         'Ricardo Londoño': 'Ricardo Londono',
         'André Lotterer': 'Andre Lotterer',
         'Onofre Marimón': 'Onofre Marimon',
-        'Eugène Martin':' Eugene Martin',
+        'Eugène Martin': 'Eugene Martin',
         'François Mazet': 'François Mazet,',
         'Gastón Mazzacane': 'Gaston Mazzacane',
         'François Migault': 'Francois Migault',
@@ -115,9 +116,9 @@ def switcher(argument):
         'Sergio Pérez': 'Sergio Perez',
         'Luis Pérez-Sala': 'Luis Perez-Sala',
         'Alfredo Pián': 'Alfredo Pian',
-        'François Picard': 'Francois Picard', 
+        'François Picard': 'Francois Picard',
         'André Pilette': 'Andre Pilette',
-        'Antônio Pizzonia':'Antonio Pizzonia',
+        'Antônio Pizzonia': 'Antonio Pizzonia',
         'Kimi Räikkönen': 'Kimi Raikkonen',
         'Stéphane Sarrazin': 'Stephane Sarrazin',
         'André Simon': 'Andre Simon',
@@ -127,8 +128,8 @@ def switcher(argument):
         'Desiré Wilson': 'Desire Wilson',
     }
 
-    # get() method of dictionary data type returns 
-    # value of passed argument if it is present 
+    # get() method of dictionary data type returns
+    # value of passed argument if it is present
     # in dictionary otherwise second argument will
     # be assigned as default value of passed argument
     val = _switcher.get(argument, "nothing")
@@ -136,6 +137,7 @@ def switcher(argument):
         return argument
     else:
         return val
+
 
 if __name__ == "__main__":
     pass

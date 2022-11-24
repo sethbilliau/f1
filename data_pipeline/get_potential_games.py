@@ -12,7 +12,7 @@ import pandas as pd
 from dotenv import dotenv_values
 
 # import functions from utils
-from utils import getneo4jDBMS
+from utils import get_neo4j_dbms
 
 currentDrivers = [
     'Alexander Albon',
@@ -196,7 +196,7 @@ def main():
 
     db_name = config['NEO4J_DATABASE']
     # Get Neo4j connection
-    neo4j_db = getneo4jDBMS()
+    neo4j_db = get_neo4j_dbms()
     db_session = neo4j_db.session(database=db_name)
 
     pairing_set = set()

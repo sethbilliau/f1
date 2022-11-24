@@ -10,7 +10,7 @@ Created on Thu Oct 20 11:23:11 2022
 from pyergast_source.pyergast import pyergast as ergast
 
 # import functions from utils
-from utils import getMongoDB
+from utils import get_mongo_db
 
 
 def update_teammate_features(driver_id, new_teammate_features, mongo_db):
@@ -41,7 +41,7 @@ def main():
         Main function to execute upon script call
     '''
     # Get connected to the Mongo DB and connect to the collections
-    mongo_db = getMongoDB()
+    mongo_db = get_mongo_db()
     db_seasons = mongo_db.get_collection('seasons')
     db_drivers = mongo_db.get_collection('drivers')
 

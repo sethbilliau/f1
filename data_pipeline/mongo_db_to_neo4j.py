@@ -7,7 +7,7 @@ Created on Thu Oct 20 11:23:11 2022
 """
 # import functions from utils
 from utils import (
-    getMongoDB, getneo4jDBMS, execute_neo_commands, switcher
+    get_mongo_db, get_neo4j_dbms, execute_neo_commands, switcher
 )
 
 
@@ -16,7 +16,7 @@ def main():
         Main function to execute upon script call
     '''
     # Get connected to the Mongo DB and connect to the collections
-    mongo_db = getMongoDB()
+    mongo_db = get_mongo_db()
     db_drivers = mongo_db.get_collection('drivers')
 
     # initialize list of execution commands
@@ -49,7 +49,7 @@ def main():
         teammates_set.add(doc['driverID'])
 
     # Connect to the DB and Execute the commands
-    graph_db_driver = getneo4jDBMS()
+    graph_db_driver = get_neo4j_dbms()
     execute_neo_commands(execution_commands, graph_db_driver)
 
     return
