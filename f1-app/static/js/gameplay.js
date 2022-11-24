@@ -1,4 +1,4 @@
-/* global showModalSlow, drawGraph, searchForDrivers */
+/* global showModalSlow, drawGraph, searchForDrivers, allDrivers, checkForTutorial */
 /*
 Gamplay Section
 
@@ -38,8 +38,9 @@ function initializeDrivers() {
     STARTING_DRIVER = document.querySelector('#prompt_player_1').textContent;
     FINAL_DRIVER = document.querySelector('#prompt_player_2').textContent;
 
-    // Remove starting and ending drivers from consideration 
-    allDrivers.splice(allDrivers.indexOf(STARTING_DRIVER), 1); allDrivers.splice(allDrivers.indexOf(FINAL_DRIVER), 1);
+    // Remove starting and ending drivers from consideration
+    allDrivers.splice(allDrivers.indexOf(STARTING_DRIVER), 1);
+    allDrivers.splice(allDrivers.indexOf(FINAL_DRIVER), 1);
     allDriversGame = allDrivers.slice();
     CURRENT_DRIVER = STARTING_DRIVER;
 }
@@ -54,8 +55,8 @@ function searchBarNumber() {
     searchWrapper.classList.add(`guess_num_${GUESS_COUNTER + 1}`);
 }
 
-// focus on the input box 
-function inputBoxFocus() { 
+// focus on the input box
+function inputBoxFocus() {
     // Clear input box of text, focus and select it
     inputBox.value = '';
     inputBox.focus();
@@ -63,7 +64,7 @@ function inputBoxFocus() {
 }
 
 // Reset search wrapper
-function resetSearchBarWrapper() { 
+function resetSearchBarWrapper() {
     // Clear all button text
     for (let i = 0; i < 5; i += 1) {
         const button = searchWrapper.querySelector(`#result-${i}`);
@@ -114,13 +115,13 @@ async function buttonHandler() {
     allDrivers.splice(allDrivers.indexOf(candidateDriver), 1);
 
     // Give input box the correct value
-    inputBox.value = "Lights out and away we go!";
+    inputBox.value = 'Lights out and away we go!';
 
     // Increment the guess counter
-    GUESS_COUNTER = GUESS_COUNTER + 1;
+    GUESS_COUNTER += 1;
 
     // Decrement Remaining Guesses
-    REMAINING_GUESSES = REMAINING_GUESSES - 1;
+    REMAINING_GUESSES -= 1;
 
     // Get current Row
     const currentRow = document.getElementById(`pool-row-${GUESS_COUNTER}`);
@@ -193,12 +194,11 @@ async function getSolution(STARTING_DRIVER_, FINAL_DRIVER_) {
 }
 
 async function buildSolution(nameList, winner) {
-    if (winner === 'winner'){
-        document.querySelector("#winning_title").textContent = 'You won!'
-    } else { 
-        document.querySelector("#winning_title").textContent = 'Solution'
+    if (winner === 'winner') {
+        document.querySelector('#winning_title').textContent = 'You won!';
+    } else {
+        document.querySelector('#winning_title').textContent = 'Solution';
     }
-    
 
     const titleSpan1 = document.createElement('span');
     titleSpan1.classList.add('italic', 'solution-copy');
@@ -247,15 +247,14 @@ async function buildSolution(nameList, winner) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function showSolution(winner="winner") {
+async function showSolution(winner = 'winner') {
     // Unhide the solution modal container
     statsModal.classList.add('show');
 
     // Add winner class to the solution div
-    if (winner === 'winner') { 
+    if (winner === 'winner') {
         solutionEl.classList.add('winner');
     }
-    
 
     // Get current drivers' teammates
     const solutionNames = await getSolution(STARTING_DRIVER, FINAL_DRIVER);
@@ -268,9 +267,8 @@ function searchForDriversInputBox(e) {
     return searchForDrivers(e, searchWrapper, searchStats);
 }
 
-// Reset board 
+// Reset board
 function resetBoard() {
-
     // hide come back text
     document.querySelector('#come_back_daily').style.visibility = 'hidden';
 
@@ -278,42 +276,43 @@ function resetBoard() {
     document.querySelector('#remaining_guesses').style.visibility = 'visible';
 
     // Reset guess number and show search wrapper
-    for (let i = 1; i < 7; i = i + 1) {
-        // Remove guess number tags 
+    for (let i = 1; i < 7; i += 1) {
+        // Remove guess number tags
         searchWrapper.classList.remove(`guess_num_${i}`);
 
         // Remove row tags
         const currentRow = document.getElementById(`pool-row-${i}`);
-        currentRow.setAttribute('data-hidden-pool-row', "");
+        currentRow.setAttribute('data-hidden-pool-row', '');
         currentRow.removeAttribute('data-active-pool-row');
         currentRow.removeAttribute('data-guess-result');
-        currentRow.textContent = "";
+        currentRow.textContent = '';
     }
 
     // Set the search wrapper as active
     searchWrapper.style.visibility = 'visible';
     searchWrapper.classList.remove(`guess_num_${GUESS_COUNTER + 1}`);
-    searchWrapper.classList.add(`guess_num_1`);
+    searchWrapper.classList.add('guess_num_1');
 
     // Make the first row active
-    const firstRow = document.getElementById(`pool-row-1`);
-    firstRow.removeAttribute("data-hidden-pool-row");
-    firstRow.setAttribute('data-active-pool-row', "");
+    const firstRow = document.getElementById('pool-row-1');
+    firstRow.removeAttribute('data-hidden-pool-row');
+    firstRow.setAttribute('data-active-pool-row', '');
 
     // Reset search bar by clearing button text and search stats
     resetSearchBarWrapper();
 
     // Reset guess counter and current driver
     GUESS_COUNTER = 0;
-    CURRENT_DRIVER = STARTING_DRIVER; 
-    REMAINING_GUESSES = MAX_GUESSES; 
+    CURRENT_DRIVER = STARTING_DRIVER;
+    REMAINING_GUESSES = MAX_GUESSES;
 
     // Change search bar name and remaining guesses
     searchBarName();
     getRemainingGuesses();
     inputBoxFocus();
 
-    // Reset allDrivers list 
+    // Reset allDrivers list
+    // eslint-disable-next-line no-global-assign
     allDrivers = allDriversGame;
 }
 
@@ -330,6 +329,6 @@ button3.onclick = buttonHandler;
 button4.onclick = buttonHandler;
 
 // Bind handler if reset button exists
-if (resetButton){
+if (resetButton) {
     resetButton.onclick = resetBoard;
 }

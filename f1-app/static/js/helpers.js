@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-/* global allDrivers, d3, vis */
+/* global allDrivers, d3, vis, showTutorialModal */
 /*
 Gamplay Section
 
@@ -71,7 +72,7 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     // Begin autocomplete only if 2 or more characters are entered by user
     if (userData && (userData.length > 1)) {
         // Look for all names containing the input substring
-        const re = new RegExp(`${userData}.+$|${userData}`, 'i'); 
+        const re = new RegExp(`${userData}.+$|${userData}`, 'i');
         const potentialDrivers = allDrivers.filter((e_) => e_.search(re) !== -1);
 
         // Limit the number of potential drivers to display
@@ -110,11 +111,11 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     }
 }
 
-// Taylor Stein's functions using window local storage 
+// Taylor Stein's functions using window local storage
 function checkForTutorial() {
-    const localTutorial = window.localStorage.getItem("viewedTutorial");
+    const localTutorial = window.localStorage.getItem('viewedTutorial');
     if (!localTutorial) { // no tutorial evidence in localStorage
         showTutorialModal();
-        window.localStorage.setItem("viewedTutorial", JSON.stringify(true));
+        window.localStorage.setItem('viewedTutorial', JSON.stringify(true));
     }
 }

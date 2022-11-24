@@ -12,7 +12,7 @@ const modalX = document.querySelector('#close_button');
 const showStatsNavEl = document.querySelector('#show_soln');
 
 // Show Solution modal container slowly (defined in styles.css)
-function showModalSlow(winner="winner") {
+function showModalSlow(winner = 'winner') {
     statsModal.style.visibility = 'visible';
     statsModal.classList.add('show');
 
@@ -59,12 +59,14 @@ function showTutorialModal() {
     tutorialContainer.classList.remove('hidden');
 }
 
-// Hide the tutorial modal container upon click
-tutorialX.onclick = function () {
+function hideTutorialModal() {
     tutorialContainer.style.visibility = 'hidden';
     tutorialContainer.classList.add('hidden');
     tutorialContainer.classList.remove('show');
-};
+}
+
+// Hide the tutorial modal container upon click
+tutorialX.onclick = hideTutorialModal;
 
 // Show the tutorial modal upon clicking the tutorial nav item
 navTutorial.onclick = showTutorialModal;
