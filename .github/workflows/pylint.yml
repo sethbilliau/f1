@@ -20,4 +20,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pip install -r f1-app/requirements.txt | pip install -r data_pipeline/requirements.txt | pylint $(git ls-files '*.py')
