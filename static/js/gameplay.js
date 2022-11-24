@@ -81,6 +81,7 @@ function initializeGame() {
     getRemainingGuesses();
     searchBarName();
     searchBarNumber();
+    checkForTutorial();
 }
 
 async function getTeammates(currentDriver) {
