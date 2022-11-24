@@ -63,8 +63,6 @@ def execute_neo_commands(execution_commands, graph_db_driver):
     for i in execution_commands:
         session.run(i)
 
-    return
-
 
 def switcher(argument):
     '''
@@ -135,8 +133,7 @@ def switcher(argument):
     val = _switcher.get(argument, "nothing")
     if val == "nothing":
         return argument
-    else:
-        return val
+    return val
 
 
 if __name__ == "__main__":

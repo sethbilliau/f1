@@ -52,8 +52,6 @@ def main():
     graph_db_driver = get_neo4j_dbms()
     execute_neo_commands(execution_commands, graph_db_driver)
 
-    return
-
 
 if __name__ == "__main__":
     main()
