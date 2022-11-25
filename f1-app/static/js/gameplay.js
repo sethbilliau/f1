@@ -1,8 +1,9 @@
-/* global showModalSlow, drawGraph, searchForDrivers, allDrivers, checkForTutorial */
+/* global showModalSlow, drawGraph, searchForDrivers, allDrivers, showTutorialModal,
+          winnerFalse, solutionShowedFalse */
 /*
-Gamplay Section
+gamplay.js
 
-This section handles the gameplay for the Team Orders game.
+This file handles the gameplay for the Team Orders game.
 */
 
 // Define variables
@@ -13,6 +14,9 @@ let STARTING_DRIVER;
 let CURRENT_DRIVER;
 let FINAL_DRIVER;
 let allDriversGame;
+let guessedPlayers;
+let guessResults;
+const GAMEID = document.querySelector('#data-aws').getAttribute('data-gameID');
 
 // Get certain elements and define them as constants
 const searchWrapper = document.querySelector('.search-container');
@@ -28,6 +32,13 @@ const solutionEl = document.querySelector('#solution');
 const graphWrapperEl = document.querySelector('#graph_wrapper');
 const resetButton = document.querySelector('#reset_game_div');
 
+/*
+
+Initialization Section
+
+These functions are used in the initializeGame function that is called onload
+
+*/
 // Get the number of remaining guesses
 function getRemainingGuesses() {
     document.getElementById('remaining_guesses_number').textContent = `${REMAINING_GUESSES}`;
@@ -55,6 +66,24 @@ function searchBarNumber() {
     searchWrapper.classList.add(`guess_num_${GUESS_COUNTER + 1}`);
 }
 
+// Taylor Stein's functions using window local storage
+function checkForTutorial() {
+    const localTutorial = window.localStorage.getItem('viewedTutorial');
+    if (!localTutorial) { // no tutorial evidence in localStorage
+        showTutorialModal();
+        window.localStorage.setItem('viewedTutorial', JSON.stringify(true));
+    }
+}
+
+// Initialize the game - to be called on load.
+function initializeGame() {
+    initializeDrivers();
+    getRemainingGuesses();
+    searchBarName();
+    searchBarNumber();
+    checkForTutorial();
+}
+
 // focus on the input box
 function inputBoxFocus() {
     // Clear input box of text, focus and select it
@@ -76,13 +105,33 @@ function resetSearchBarWrapper() {
     searchStats.innerHTML = '';
 }
 
-// Initialize the game - to be called on load.
-function initializeGame() {
-    initializeDrivers();
-    getRemainingGuesses();
+function storeGame() {
+    window.localStorage.setItem('gameID', GAMEID);
+}
+
+function getParameters() {
+    const existingGuessedPlayers = JSON.parse(window.localStorage.getItem('guessedPlayers'));
+    const existingGuessResults = JSON.parse(window.localStorage.getItem('guessResults'));
+    if (existingGuessedPlayers) {
+        guessedPlayers = existingGuessedPlayers;
+    } else {
+        guessedPlayers = [];
+    }
+
+    if (existingGuessResults) {
+        guessResults = existingGuessResults;
+    } else {
+        guessResults = [];
+    }
+}
+
+function updateSearchBarGetGuessesInputBoxFocus() {
+    // Update search bar name
     searchBarName();
-    searchBarNumber();
-    checkForTutorial();
+    // Get remaining guesses
+    getRemainingGuesses();
+    // Focus on input box
+    inputBoxFocus();
 }
 
 async function getTeammates(currentDriver) {
@@ -109,9 +158,32 @@ async function checkCorrectness(teammates, candidateDriver, finalDriver) {
     return (result);
 }
 
+function addGuessToLocalStorage(candidateDriver_, guessCorrectness_) {
+    // Check if we are in daily mode
+    if (!resetButton) {
+        // Add guessed driver to local storage of guessed drivers
+        guessedPlayers.push(candidateDriver_);
+        window.localStorage.setItem('guessedPlayers', JSON.stringify(guessedPlayers));
+
+        // Add guess result to local storage
+        guessResults.push(guessCorrectness_);
+        window.localStorage.setItem('guessResults', JSON.stringify(guessResults));
+    }
+}
+
+function showComeBackDailyText() {
+    // Hide Remaining Guesses Counter
+    document.querySelector('#remaining_guesses').style.visibility = 'hidden';
+
+    // Show come back text
+    document.querySelector('#come_back_daily').style.visibility = 'visible';
+}
+
 async function buttonHandler() {
     // get candidate driver
     const candidateDriver = this.textContent;
+
+    // Remove candidate driver from list of available drivers in autocomplete
     allDrivers.splice(allDrivers.indexOf(candidateDriver), 1);
 
     // Give input box the correct value
@@ -139,6 +211,9 @@ async function buttonHandler() {
         FINAL_DRIVER,
     );
 
+    // Add guess information to local storage
+    addGuessToLocalStorage(candidateDriver, guessCorrectness);
+
     // If the guess is correct, change the current driver to the candidate driver
     if (guessCorrectness === 'correct') {
         CURRENT_DRIVER = candidateDriver;
@@ -165,18 +240,13 @@ async function buttonHandler() {
         resetSearchBarWrapper();
 
         // Update search bar name & remaining guesses, focus on input box
-        searchBarName();
-        getRemainingGuesses();
-        inputBoxFocus();
+        updateSearchBarGetGuessesInputBoxFocus();
     } else {
         searchWrapper.style.visibility = 'hidden';
 
         if (guessCorrectness === 'winner' || REMAINING_GUESSES === 0) {
-            // Hide Remaining Guesses Counter
-            document.querySelector('#remaining_guesses').style.visibility = 'hidden';
-
-            // show come back text
-            document.querySelector('#come_back_daily').style.visibility = 'visible';
+            // show come back daily text
+            showComeBackDailyText();
 
             // show solution modal container
             showModalSlow(guessCorrectness);
@@ -307,19 +377,103 @@ function resetBoard() {
     REMAINING_GUESSES = MAX_GUESSES;
 
     // Change search bar name and remaining guesses
-    searchBarName();
-    getRemainingGuesses();
-    inputBoxFocus();
+    updateSearchBarGetGuessesInputBoxFocus();
 
     // Reset allDrivers list
     // eslint-disable-next-line no-global-assign
     allDrivers = allDriversGame;
 }
 
+// Populate existing game if necessary
+function populateExistingGame() {
+    const existingGuessedPlayers = JSON.parse(window.localStorage.getItem('guessedPlayers'));
+    const existingGuessResults = JSON.parse(window.localStorage.getItem('guessResults'));
+
+    for (let index = 0; index < existingGuessedPlayers.length; index += 1) {
+        // Get current Row
+        const currentRow = document.getElementById(`pool-row-${index + 1}`);
+        // Put the candidate driver's name in the current row
+        currentRow.textContent = existingGuessedPlayers[index];
+        // Remove candidate driver from list of available drivers in autocomplete
+        allDrivers.splice(allDrivers.indexOf(existingGuessedPlayers[index]), 1);
+
+        // Remove active row tag or hidden tag
+        if (index === 0) {
+            currentRow.removeAttribute('data-active-pool-row');
+        } else {
+            currentRow.removeAttribute('data-hidden-pool-row');
+        }
+
+        // Update current driver if guess is correct
+        if (existingGuessResults[index] === 'correct') {
+            CURRENT_DRIVER = existingGuessedPlayers[index];
+        }
+
+        // Set guess result according to guess correctness
+        currentRow.setAttribute('data-guess-result', existingGuessResults[index]);
+    }
+    // Set guess cunter and remaining guesses
+    GUESS_COUNTER = existingGuessedPlayers.length;
+    REMAINING_GUESSES = MAX_GUESSES - existingGuessedPlayers.length;
+
+    // Get winner status
+    const winnerStatus = JSON.parse(window.localStorage.getItem('winner'));
+    if (existingGuessedPlayers.length === 6 || winnerStatus) {
+        // Hide Search Wrapper
+        searchWrapper.style.visibility = 'hidden';
+
+        // show come back daily text
+        showComeBackDailyText();
+    } else {
+        // Get current Row
+        const finalRow = document.getElementById(`pool-row-${GUESS_COUNTER + 1}`);
+
+        // Show new row
+        finalRow.setAttribute('data-active-pool-row', '');
+        finalRow.removeAttribute('data-hidden-pool-row');
+
+        // Iterate guess number
+        searchWrapper.classList.remove('guess_num_1');
+        searchWrapper.classList.add(`guess_num_${GUESS_COUNTER + 1}`);
+
+        // Update search bar name & remaining guesses, focus on input box
+        updateSearchBarGetGuessesInputBoxFocus();
+    }
+}
+
+// Check for new game
+function checkForNewGame() {
+    // Get game id from local storage
+    const localGameID = window.localStorage.getItem('gameID');
+
+    // Check if there is a local game
+    if (!localGameID || localGameID !== GAMEID) {
+        storeGame();
+        winnerFalse();
+        solutionShowedFalse();
+    }
+
+    // Get parameters, initialize the game
+    getParameters();
+    initializeGame();
+
+    // Populate the game if needed
+    if (guessedPlayers && guessedPlayers.length > 0) {
+        populateExistingGame();
+    }
+}
+
 inputBox.onkeyup = searchForDriversInputBox;
 
 // Call functions to initialize the game
-window.onload = initializeGame;
+if (!resetButton) {
+    window.onload = checkForNewGame;
+} else {
+    window.onload = initializeGame;
+
+    // Bind handler if reset button exists
+    resetButton.onclick = resetBoard;
+}
 
 // Create Handlers for each of the buttons
 button0.onclick = buttonHandler;
@@ -327,8 +481,3 @@ button1.onclick = buttonHandler;
 button2.onclick = buttonHandler;
 button3.onclick = buttonHandler;
 button4.onclick = buttonHandler;
-
-// Bind handler if reset button exists
-if (resetButton) {
-    resetButton.onclick = resetBoard;
-}

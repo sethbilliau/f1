@@ -111,11 +111,18 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     }
 }
 
-// Taylor Stein's functions using window local storage
-function checkForTutorial() {
-    const localTutorial = window.localStorage.getItem('viewedTutorial');
-    if (!localTutorial) { // no tutorial evidence in localStorage
-        showTutorialModal();
-        window.localStorage.setItem('viewedTutorial', JSON.stringify(true));
-    }
+function winnerTrue() {
+    window.localStorage.setItem('winner', JSON.stringify(true));
+}
+
+function winnerFalse() {
+    window.localStorage.setItem('winner', JSON.stringify(false));
+}
+
+function solutionShowedFalse() {
+    window.localStorage.setItem('solutionShowed', JSON.stringify(false));
+}
+
+function solutionShowedTrue() {
+    window.localStorage.setItem('solutionShowed', JSON.stringify(true));
 }
