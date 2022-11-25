@@ -8,6 +8,14 @@ F1 Team orders has Daily mode where a new driver pairing is selected each day, u
 
 <img width="1440" alt="Tutorial on how to play" src="https://user-images.githubusercontent.com/32553332/203686026-43be2b46-23ba-444b-beea-841c68364751.png">
 
-## Game Board
+## Daily Game Board
 
 <img width="1440" alt="Image of the game board" src="https://user-images.githubusercontent.com/32553332/203686046-37fc1312-e906-47be-8eee-425ac75e8235.png">
+
+## Unlimited Game Board
+
+<img width="1440" alt="Unlimited game board" src="https://user-images.githubusercontent.com/32553332/204002020-06b182ef-4e0c-4a13-a169-1f7e7568742b.png">
+
+## Graph Visualization Page
+
+<img width="1440" alt="Graph Visualization Page" src="https://user-images.githubusercontent.com/32553332/204002083-18388386-9abd-478f-b9c1-bc62ced73480.png">
