@@ -126,3 +126,11 @@ function solutionShowedFalse() {
 function solutionShowedTrue() {
     window.localStorage.setItem('solutionShowed', JSON.stringify(true));
 }
+
+function resetGuessedPlayers() {
+    window.localStorage.setItem('guessedPlayers', JSON.stringify([]));
+}
+
+function resetGuessResults() {
+    window.localStorage.setItem('guessResults', JSON.stringify([]));
+}

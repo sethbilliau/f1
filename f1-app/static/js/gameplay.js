@@ -1,5 +1,6 @@
 /* global showModalSlow, drawGraph, searchForDrivers, allDrivers, showTutorialModal,
-          winnerFalse, solutionShowedFalse */
+          winnerTrue, winnerFalse, solutionShowedFalse, solutionShowedTrue,
+          resetGuessedPlayers, resetGuessResults */
 /*
 gamplay.js
 
@@ -316,6 +317,48 @@ async function buildSolution(nameList, winner) {
     await drawGraph(nameList, graphWrapperEl);
 }
 
+// Player Variables
+let statistics = {
+    winGuesses: {
+        0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
+    },
+    totalPoints: 0,
+};
+
+function initializeStatistics() {
+    window.localStorage.setItem('statistics', JSON.stringify(statistics));
+}
+
+function checkForStatistics() {
+    const localStatistics = window.localStorage.getItem('statistics');
+    if (!localStatistics) { // no statistics found in localStorage
+        initializeStatistics();
+    } else { // statistics are in localStorage
+        statistics = JSON.parse(localStatistics);
+    }
+}
+
+function addPoints(pathLength) {
+    const pointsAwarded = {
+        0: 10, 1: 6, 2: 4, 3: 3, 4: 2, 5: 1, 6: 0,
+    };
+    const userGuesses = pathLength - GUESS_COUNTER;
+    statistics.winGuesses[userGuesses] += pointsAwarded[userGuesses];
+    statistics.totalPoints += pointsAwarded[userGuesses];
+    window.localStorage.setItem('statistics', JSON.stringify(statistics));
+}
+
+function modifyStatistics(namesList) {
+    // Add points
+    const solution = JSON.parse(window.localStorage.getItem('solutionShowed'));
+    if (!solution) {
+        checkForStatistics();
+
+        // subtract 2 for the starting/ending drivers
+        addPoints(namesList.length - 2);
+    }
+}
+
 // eslint-disable-next-line no-unused-vars
 async function showSolution(winner = 'winner') {
     // Unhide the solution modal container
@@ -328,6 +371,16 @@ async function showSolution(winner = 'winner') {
 
     // Get current drivers' teammates
     const solutionNames = await getSolution(STARTING_DRIVER, FINAL_DRIVER);
+
+    if (!resetButton) {
+        // modify statistics
+        await modifyStatistics(solutionNames);
+        solutionShowedTrue();
+
+        if (winner === 'winner') {
+            winnerTrue();
+        }
+    }
 
     await buildSolution(solutionNames, winner);
 }
@@ -445,12 +498,13 @@ function populateExistingGame() {
 function checkForNewGame() {
     // Get game id from local storage
     const localGameID = window.localStorage.getItem('gameID');
-
     // Check if there is a local game
     if (!localGameID || localGameID !== GAMEID) {
-        storeGame();
+        resetGuessedPlayers();
+        resetGuessResults();
         winnerFalse();
         solutionShowedFalse();
+        storeGame();
     }
 
     // Get parameters, initialize the game
@@ -463,6 +517,7 @@ function checkForNewGame() {
     }
 }
 
+// Bind search/autocomplete to input box
 inputBox.onkeyup = searchForDriversInputBox;
 
 // Call functions to initialize the game

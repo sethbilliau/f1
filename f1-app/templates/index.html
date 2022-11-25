@@ -13,6 +13,9 @@
             <div id="board">
                 <div id="game_prompt">
                     <h3>
+                        {% if request.path == "/" %}
+                        <span>Daily Game #{{data.gameID}}: </span>
+                        {% endif %}
                         <span>Connect </span>
                         <span class="game-prompt-player" id="prompt_player_1">{{data.driver1}}</span>
                         <span> to </span>
