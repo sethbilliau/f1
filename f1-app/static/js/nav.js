@@ -1,4 +1,5 @@
-/* global graphWrapperEl, statsModal, showSolution, solutionEl */
+/* global graphWrapperEl, statsModal, showSolution, solutionEl, winnerTrue,
+          solutionShowedTrue, resetButton */
 /*
 Solution Modal Section.
 
@@ -13,6 +14,12 @@ const showStatsNavEl = document.querySelector('#show_soln');
 
 // Show Solution modal container slowly (defined in styles.css)
 function showModalSlow(winner = 'winner') {
+    if (!resetButton) {
+        solutionShowedTrue();
+        if (winner === 'winner') {
+            winnerTrue();
+        }
+    }
     statsModal.style.visibility = 'visible';
     statsModal.classList.add('show');
 

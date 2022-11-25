@@ -36,7 +36,8 @@ def get_starting_ending_drivers_from_s3(region, key_id, secretkey, bucket, key):
     json_content = json.loads(file_content)
     return {
         'driver1': json_content[0]['driver1'],
-        'driver2': json_content[0]['driver2']
+        'driver2': json_content[0]['driver2'],
+        'gameID': json_content[0]['dayCounter']
     }
 
 
