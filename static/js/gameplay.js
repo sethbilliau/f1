@@ -351,6 +351,8 @@ function addNewValuesToStatistics(pathLength, winner) {
     if (winner === 'winner') {
         statistics.numWin += 1;
         statistics.currentStreak += 1;
+    } else {
+        statistics.currentStreak += 0;
     }
     statistics.maxStreak = Math.max(statistics.currentStreak, statistics.maxStreak);
 
@@ -364,7 +366,7 @@ function updateStatisticsTable() {
     if (statistics.numPlayed === 0) {
         document.querySelector('#win_perc').querySelector('.stat-num').textContent = 0;
     } else {
-        document.querySelector('#win_perc').querySelector('.stat-num').textContent = Math.round(statistics.numWin / statistics.numPlayed, 2) * 100;
+        document.querySelector('#win_perc').querySelector('.stat-num').textContent = Math.round((statistics.numWin / statistics.numPlayed) * 100);
     }
     document.querySelector('#current_streak').querySelector('.stat-num').textContent = statistics.currentStreak;
     document.querySelector('#max_streak').querySelector('.stat-num').textContent = statistics.maxStreak;
