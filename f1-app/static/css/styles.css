@@ -45,7 +45,7 @@ nav .navbar-brand .green {
 }
 
 /* 404 message */
-#pikachu{
+#pikachu {
   /* constrain images on small screens */
   max-width: 100%;
   display: block;
@@ -669,7 +669,7 @@ a.clickable-links {
   overflow: auto;
   overflow-y: scroll;
   align-items: center;
-  width: 100%; 
+  width: 100%;
   height: 100%;
 }
 
@@ -682,6 +682,7 @@ a.clickable-links {
 
 .stat-num {
   font-size: 30px;
+  color: #00A19C;
 }
 
 .stat-unit {
