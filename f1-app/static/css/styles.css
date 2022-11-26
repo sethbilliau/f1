@@ -21,10 +21,16 @@ html, body {
 input {
   background-color: #f9f9f9;
 }
-
+/* 
 .footer {
   margin-top: auto;
   margin-bottom: 5px;
+} */
+
+.footer {
+  position: relative;
+  clear: both;
+  /* background-color: red; */
 }
 
 nav .navbar-brand {
@@ -121,7 +127,7 @@ nav .navbar-brand .green {
   width: 100%;
   max-width: 62.5rem;
   height: 100%;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   justify-content: space-between;
 }
 
@@ -641,7 +647,7 @@ h1 {
 }
 
 #come_back_daily {
-  visibility: hidden;
+  display: none;
   max-width: 38.438rem;
   width: 100%;
   text-align: center;

@@ -165,11 +165,11 @@ function addGuessToLocalStorage(candidateDriver_, guessCorrectness_) {
 
 function showComeBackDailyText() {
     // Hide Remaining Guesses Counter
-    // document.querySelector('#remaining_guesses').style.visibility = 'hidden';
-    document.querySelector('#remaining_guesses').remove();
+    document.querySelector('#remaining_guesses').style.display = 'none';
 
     // Show come back text
-    document.querySelector('#come_back_daily').style.visibility = 'visible';
+    // .style.display = 'none';
+    document.querySelector('#come_back_daily').style.display = 'flex';
 }
 
 async function buttonHandler() {
@@ -431,10 +431,10 @@ function searchForDriversInputBox(e) {
 // Reset board
 function resetBoard() {
     // hide come back text
-    document.querySelector('#come_back_daily').style.visibility = 'hidden';
+    document.querySelector('#come_back_daily').style.display = 'none';
 
     // Show Remaining Guesses Counter
-    document.querySelector('#remaining_guesses').style.visibility = 'visible';
+    document.querySelector('#remaining_guesses').style.display = 'flex';
 
     // Reset guess number and show search wrapper
     for (let i = 1; i < 7; i += 1) {
