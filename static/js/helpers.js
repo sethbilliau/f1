@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-/* global allDrivers, d3, vis */
+/* global allDrivers, d3, vis, showTutorialModal */
 /*
 Gamplay Section
 
@@ -47,8 +48,33 @@ async function drawGraph(nameList, element) {
 
             const options = {
                 groups: {
-                    path: { color: { background: 'lightblue' } },
-                    nonpath: { color: { background: 'lightgray' } },
+                    path: {
+                        color: {
+                            background: '#004225',
+                            highlight: {
+                                background: '#004225',
+                                // required: enables displaying <b>text</b> in label as bold text
+                                multi: 'html',
+                                // optional: use this if you want to specify the font of bold text
+                                // bold: '16px arial black',
+                            },
+                            border: 'black',
+                        },
+                        font: {
+                            color: 'white',
+                        },
+                    },
+                    nonpath: {
+                        color: {
+                            background: 'lightgray',
+                            border: 'black',
+                            highlight: {
+                                background: 'lightgray',
+                                // required: enables displaying <b>text</b> in label as bold text
+                                multi: 'html',
+                            },
+                        },
+                    },
                 },
             };
 
@@ -71,7 +97,7 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     // Begin autocomplete only if 2 or more characters are entered by user
     if (userData && (userData.length > 1)) {
         // Look for all names containing the input substring
-        const re = new RegExp(`${userData}.+$|${userData}`, 'i'); 
+        const re = new RegExp(`${userData}.+$|${userData}`, 'i');
         const potentialDrivers = allDrivers.filter((e_) => e_.search(re) !== -1);
 
         // Limit the number of potential drivers to display
@@ -110,11 +136,26 @@ function searchForDrivers(e, wrapper, stats, resultPrefix = '') {
     }
 }
 
-// Taylor Stein's functions using window local storage 
-function checkForTutorial() {
-    const localTutorial = window.localStorage.getItem("viewedTutorial");
-    if (!localTutorial) { // no tutorial evidence in localStorage
-        showTutorialModal();
-        window.localStorage.setItem("viewedTutorial", JSON.stringify(true));
-    }
+function winnerTrue() {
+    window.localStorage.setItem('winner', JSON.stringify(true));
+}
+
+function winnerFalse() {
+    window.localStorage.setItem('winner', JSON.stringify(false));
+}
+
+function solutionShowedFalse() {
+    window.localStorage.setItem('solutionShowed', JSON.stringify(false));
+}
+
+function solutionShowedTrue() {
+    window.localStorage.setItem('solutionShowed', JSON.stringify(true));
+}
+
+function resetGuessedPlayers() {
+    window.localStorage.setItem('guessedPlayers', JSON.stringify([]));
+}
+
+function resetGuessResults() {
+    window.localStorage.setItem('guessResults', JSON.stringify([]));
 }
