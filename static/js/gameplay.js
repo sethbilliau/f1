@@ -389,8 +389,10 @@ function modifyStatistics(namesList, winner) {
 function initializeGame() {
     initializeDrivers();
     getRemainingGuesses();
-    checkForStatistics();
-    updateStatisticsTable();
+    if (!resetButton) {
+        checkForStatistics();
+        updateStatisticsTable();
+    }
     searchBarName();
     searchBarNumber();
     checkForTutorial();
