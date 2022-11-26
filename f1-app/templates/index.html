@@ -8,11 +8,14 @@
 
 {% block page_content %}
     <meta id="data-aws" data-gameID="{{data.gameID}}" data-driver1="{{data.driver1}}" data-driver2="{{data.driver2}}">
-    <div id="container">
+    <div class="container">
         <div id="game">
-            <div id="board">
+            <div class="board">
                 <div id="game_prompt">
                     <h3>
+                        {% if request.path == "/" %}
+                        <span>Daily Game #{{data.gameID}}: </span>
+                        {% endif %}
                         <span>Connect </span>
                         <span class="game-prompt-player" id="prompt_player_1">{{data.driver1}}</span>
                         <span> to </span>
@@ -63,10 +66,18 @@
                     <div id="come_back_daily">
                         <h5>
                             <br>
+                            {% if request.path == "/" %}
                             <span class="come_back_text">Come back tomorrow after 12:00 am ET for a new <a class="clickable-links" href="/">daily</a> game.</span>
+                            {% else %}
+                            <span class="come_back_text">Click new game button or refresh the page for another pair of drivers in <a class="clickable-links" href="/unlimited">unlimited</a> mode.</span>
+                            {% endif %}
                             <br> 
                             <br>
+                            {% if request.path == "/" %}
                             <span class="come_back_text">Also, check out <a class="clickable-links" href="/unlimited">unlimited</a> mode to play on-demand and the <a class="clickable-links" href="/explore">visualize</a> page to explore F1 teammate networks.</span>
+                            {% else %}
+                            <span class="come_back_text">Don't forget to play today's <a class="clickable-links" href="/">daily</a> game if you haven't already! Also, check out the <a class="clickable-links" href="/explore">visualize</a> page to explore F1 teammate networks.</span>
+                            {% endif %}
                         </h5>
                     </div>
                 </div>
@@ -75,6 +86,31 @@
             {% endblock %}
         </div>
     </div>
+    {% if request.path == "/" %}
+    <div class="container">
+        <div class="board" id="statistics-section">
+            <h3>Statistics</h3>
+            <div id="stats_wrapper">
+                <div class="stat" id="num_games">
+                    <div class="stat-num"></div>
+                    <div class="stat-unit">Played</div>
+                </div>
+                <div class="stat" id="win_perc">
+                    <div class="stat-num"></div>
+                    <div class="stat-unit">Win %</div>
+                </div>
+                <div class="stat" id="current_streak">
+                    <div class="stat-num"></div>
+                    <div class="stat-unit">Current Streak</div>
+                </div>
+                <div class="stat" id="max_streak">
+                    <div class="stat-num"></div>
+                    <div class="stat-unit">Max Streak</div>
+                </div>                  
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% include 'include/solution_container.html' %}
     {% include 'include/tutorial_container.html' %}
     {% include 'include/support_container.html' %}
