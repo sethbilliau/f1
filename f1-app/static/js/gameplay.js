@@ -76,15 +76,6 @@ function checkForTutorial() {
     }
 }
 
-// Initialize the game - to be called on load.
-function initializeGame() {
-    initializeDrivers();
-    getRemainingGuesses();
-    searchBarName();
-    searchBarNumber();
-    checkForTutorial();
-}
-
 // focus on the input box
 function inputBoxFocus() {
     // Clear input box of text, focus and select it
@@ -174,7 +165,8 @@ function addGuessToLocalStorage(candidateDriver_, guessCorrectness_) {
 
 function showComeBackDailyText() {
     // Hide Remaining Guesses Counter
-    document.querySelector('#remaining_guesses').style.visibility = 'hidden';
+    // document.querySelector('#remaining_guesses').style.visibility = 'hidden';
+    document.querySelector('#remaining_guesses').remove();
 
     // Show come back text
     document.querySelector('#come_back_daily').style.visibility = 'visible';
@@ -271,10 +263,17 @@ async function buildSolution(nameList, winner) {
         document.querySelector('#winning_title').textContent = 'Solution';
     }
 
+    let optionalS;
+    if ((nameList.length - 2) !== 1) {
+        optionalS = 's';
+    } else {
+        optionalS = '';
+    }
+
     const titleSpan1 = document.createElement('span');
     titleSpan1.classList.add('italic', 'solution-copy');
     titleSpan1.textContent = `The shortest teammate path between ${STARTING_DRIVER} and ${FINAL_DRIVER
-    } is ${String(nameList.length - 2)} teammate(s) long.`;
+    } is ${String(nameList.length - 2)} teammate${optionalS} long.`;
 
     solutionEl.appendChild(titleSpan1);
     solutionEl.appendChild(document.createElement('br'));
@@ -317,14 +316,18 @@ async function buildSolution(nameList, winner) {
     await drawGraph(nameList, graphWrapperEl);
 }
 
-// Player Variables
 let statistics = {
+    numPlayed: 0,
+    numWin: 0,
+    currentStreak: 0,
+    maxStreak: 0,
     winGuesses: {
         0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
     },
     totalPoints: 0,
 };
 
+// Player Variables
 function initializeStatistics() {
     window.localStorage.setItem('statistics', JSON.stringify(statistics));
 }
@@ -338,25 +341,60 @@ function checkForStatistics() {
     }
 }
 
-function addPoints(pathLength) {
+function addNewValuesToStatistics(pathLength, winner) {
     const pointsAwarded = {
         0: 10, 1: 6, 2: 4, 3: 3, 4: 2, 5: 1, 6: 0,
     };
     const userGuesses = pathLength - GUESS_COUNTER;
     statistics.winGuesses[userGuesses] += pointsAwarded[userGuesses];
     statistics.totalPoints += pointsAwarded[userGuesses];
+    statistics.numPlayed += 1;
+    if (winner === 'winner') {
+        statistics.numWin += 1;
+        statistics.currentStreak += 1;
+    }
+    statistics.maxStreak = Math.max(statistics.currentStreak, statistics.maxStreak);
+
     window.localStorage.setItem('statistics', JSON.stringify(statistics));
 }
 
-function modifyStatistics(namesList) {
+function updateStatisticsTable() {
+    checkForStatistics();
+    // Statistics div
+    document.querySelector('#num_games').querySelector('.stat-num').textContent = statistics.numPlayed;
+    if (statistics.numPlayed === 0) {
+        document.querySelector('#win_perc').querySelector('.stat-num').textContent = 0;
+    } else {
+        document.querySelector('#win_perc').querySelector('.stat-num').textContent = Math.round(statistics.numWin / statistics.numPlayed, 2) * 100;
+    }
+    document.querySelector('#current_streak').querySelector('.stat-num').textContent = statistics.currentStreak;
+    document.querySelector('#max_streak').querySelector('.stat-num').textContent = statistics.maxStreak;
+}
+
+function modifyStatistics(namesList, winner) {
     // Add points
     const solution = JSON.parse(window.localStorage.getItem('solutionShowed'));
     if (!solution) {
+        // Check for existing stats
         checkForStatistics();
 
         // subtract 2 for the starting/ending drivers
-        addPoints(namesList.length - 2);
+        addNewValuesToStatistics(namesList.length - 2, winner);
+
+        // Update Statistics Table
+        updateStatisticsTable();
     }
+}
+
+// Initialize the game - to be called on load.
+function initializeGame() {
+    initializeDrivers();
+    getRemainingGuesses();
+    checkForStatistics();
+    updateStatisticsTable();
+    searchBarName();
+    searchBarNumber();
+    checkForTutorial();
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -374,7 +412,7 @@ async function showSolution(winner = 'winner') {
 
     if (!resetButton) {
         // modify statistics
-        await modifyStatistics(solutionNames);
+        await modifyStatistics(solutionNames, winner);
         solutionShowedTrue();
 
         if (winner === 'winner') {

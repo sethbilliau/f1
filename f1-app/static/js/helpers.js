@@ -48,8 +48,33 @@ async function drawGraph(nameList, element) {
 
             const options = {
                 groups: {
-                    path: { color: { background: 'lightblue' } },
-                    nonpath: { color: { background: 'lightgray' } },
+                    path: {
+                        color: {
+                            background: '#004225',
+                            highlight: {
+                                background: '#004225',
+                                // required: enables displaying <b>text</b> in label as bold text
+                                multi: 'html',
+                                // optional: use this if you want to specify the font of bold text
+                                // bold: '16px arial black',
+                            },
+                            border: 'black',
+                        },
+                        font: {
+                            color: 'white',
+                        },
+                    },
+                    nonpath: {
+                        color: {
+                            background: 'lightgray',
+                            border: 'black',
+                            highlight: {
+                                background: 'lightgray',
+                                // required: enables displaying <b>text</b> in label as bold text
+                                multi: 'html',
+                            },
+                        },
+                    },
                 },
             };
 
