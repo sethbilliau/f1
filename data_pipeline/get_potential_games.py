@@ -15,26 +15,26 @@ from dotenv import dotenv_values
 from helpers import get_neo4j_dbms
 
 currentDrivers = [
-    'Alexander Albon',
-    'Fernando Alonso',
-    'Valtteri Bottas',
-    'Pierre Gasly',
-    'Lewis Hamilton',
-    'Nicholas Latifi',
-    'Charles Leclerc',
-    'Kevin Magnussen',
-    'Lando Norris',
-    'Esteban Ocon',
-    'Sergio Perez',
-    'Daniel Ricciardo',
-    'George Russell',
-    'Carlos Sainz',
-    'Mick Schumacher',
-    'Lance Stroll',
-    'Yuki Tsunoda',
     'Max Verstappen',
-    'Sebastian Vettel',
+    'Sergio Perez',
+    'Lewis Hamilton',
+    'George Russell',
+    'Charles Leclerc',
+    'Carlos Sainz',
+    'Fernando Alonso',
+    'Lance Stroll',
+    'Pierre Gasly',
+    'Esteban Ocon',
+    'Lando Norris',
+    'Oscar Piastri',
+    'Alexander Albon',
+    'Logan Sargeant'
+    'Kevin Magnussen',
+    'Nico Hulkenberg',
+    'Daniel Ricciardo',
+    'Yuki Tsunoda',
     'Guanyu Zhou',
+    'Valtteri Bottas',
 ]
 
 worldChamps = [
@@ -174,7 +174,10 @@ otherDrivers = [
     'Felipe Nasr',
     'Roberto Merhi',
     'Will Stevens',
-
+    'Mick Schumacher',
+    'Nicholas Latifi',
+    'Sebastian Vettel',
+    'Nyck de Vries',
 ]
 
 LIMIT = 3

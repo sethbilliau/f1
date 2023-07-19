@@ -46,8 +46,8 @@ def main():
     db_drivers = mongo_db.get_collection('drivers')
 
     # Initialize an empty set of teammates for each driver in the drivers df
-    db_drivers.update_many({}, {"$set": {"teammateSet": []}})
-    db_drivers.update_many({}, {"$set": {"teammateFeatures": []}})
+    # db_drivers.update_many({}, {"$set": {"teammateSet": []}})
+    # db_drivers.update_many({}, {"$set": {"teammateFeatures": []}})
 
     # Get a list of all seasons
     year_races_list = list(db_seasons.find({}, {'year': 1, 'numRaces': 1}))
@@ -57,7 +57,7 @@ def main():
         year = season_rec['year']
         num_races = season_rec['numRaces']
 
-        print(f'Collecting results for {year} with {num_races} races')
+        print(f'DEBUG: Collecting results for {year} with {num_races} races')
 
         for race_idx in range(0, num_races, 1):
             print(f"DEBUG: Year {year} race {race_idx + 1}")
@@ -73,7 +73,7 @@ def main():
 
                 print("DEBUG: Adding Teammates for the " +
                       str(constructordf.shape[0]) + " drivers for "
-                      + constructor + ")")
+                      + constructor)
 
                 # Get all the teammates in a lst of dicts for teammate features
                 teammate_entry = [{

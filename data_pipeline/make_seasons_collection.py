@@ -39,7 +39,7 @@ def main():
             try:
                 df_year = ergast.get_schedule(year)
             except Exception:
-                time.sleep(0.5)
+                time.sleep(1)
             else:
                 break
 
